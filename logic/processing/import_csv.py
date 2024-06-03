@@ -41,9 +41,9 @@ def import_csv(csv_path):
 
 
 # 테스트 코드
-RAW_PATH = "resource/raw"
+# RAW_PATH = "resource/raw"
 
-department_name_to_id, id_to_department_name = get_department_dict(RAW_PATH)
-imported_data = import_csv(RAW_PATH)
+# department_name_to_id, id_to_department_name = get_department_dict(RAW_PATH)
+# imported_data = import_csv(RAW_PATH)
 
-print(imported_data[department_name_to_id["컴퓨터공학과-컴퓨터공학"]])
+# print(imported_data[department_name_to_id["컴퓨터공학과-컴퓨터공학"]])
