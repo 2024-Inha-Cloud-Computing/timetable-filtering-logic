@@ -13,6 +13,7 @@
 #### import_csv
 - 모듈 설명
   - csv 파일을 읽어와서 DataFrame으로 변환하는 모듈
+
 <details>
   <summary>함수 구성</summary>
   
@@ -26,5 +27,19 @@
   - csv 파일들을 DataFrame으로 읽어와서 list로 반환하는 함수
   - **input** csv 파일의 경로
   - **output** DataFrame list
+
+</details>
+
+#### entire_course
+- 모듈 설명
+  - 모든 강좌 데이터가 들어있는 DataFrame을 만드는 모듈
+
+<details>
+  <summary>함수 구성</summary>
+  
+  ##### get_entire_course
+  - 과 별 강의 데이터를 모두 합쳐서 하나의 DataFrame으로 만드는 함수
+  - **input** DataFrame list
+  - **output** DataFrame
 
 </details>
