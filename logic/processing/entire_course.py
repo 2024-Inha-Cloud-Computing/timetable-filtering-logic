@@ -2,8 +2,6 @@
 
 import pandas as pd
 
-import import_csv
-
 # 과 별 강의 데이터를 모두 합쳐서 하나의 DataFrame으로 만드는 함수
 # input: DataFrame list
 # output: DataFrame
@@ -23,6 +21,8 @@ def merge_all_data(data_list):
     return merged_data
 
 # 테스트 코드
+# import import_csv
+
 # RAW_PATH = "resource/raw"
 
 # imported_data = import_csv.import_csv(RAW_PATH)
