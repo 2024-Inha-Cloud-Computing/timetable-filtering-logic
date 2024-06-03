@@ -1,0 +1,4 @@
+﻿course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes
+SEE3000-001,SEE3000,001,반도체 공정장비실습,전체,3.0,전공선택,"금16,17,18,19,20,21(5서252)",전승준,Pass/Fail, 
+SEE3101-001,SEE3101,001,반도체개론,전체,3.0,전공필수,"화13,14,15,목10,11,12(5서255)",최리노,상대평가, 
+SEE3102-001,SEE3102,001,전기자기학,전체,3.0,전공필수,"월13,14,15,16,17,18(5서252)",김경헌,상대평가, 
