@@ -20,14 +20,16 @@ for department_id, df in enumerate(df_list_by_departement):
 print(df_list_by_departement[department_name_to_id["컴퓨터공학과-컴퓨터공학"]])
 
 
-# # entire_course 모듈 테스트 코드
-# RAW_PATH = "resource/raw"
+# [entire_course 모듈] 학과별 csv 파일을 하나로 병합한 csv 파일 생성
+df_list_by_departement = import_csv.import_csv(RAW_PATH)
+entire_course_df = entire_course.merge_all_data(df_list_by_departement)
 
-# df_list_by_departement = import_csv.import_csv(RAW_PATH)
-# merged_data = entire_course.merge_all_data(df_list_by_departement)
+entire_course_df.to_csv(
+    f"{PROCESSED_PATH}/entire_course/entire_course.csv", index=False
+)
 
-# merged_data.to_csv("export/entire_course/merged_data.csv", index=False)
-# print(merged_data)
+# 출력 테스트 코드
+print(entire_course_df)
 
 # # time_str_to_bit 모듈 테스트 코드
 # RAW_PATH = "resource/raw"
