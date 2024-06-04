@@ -17,11 +17,18 @@ def get_department_dict(csv_path):
 
     # csv 파일명을 통해 학부과-전공명을 추출
     for file in enumerate(csv_files):
-        file_split = file[1].split("_")
-        department_name = file_split[0] + "-" + file_split[1]
+        # 확장자 제거 및 "_"로 split
+        file_split = file[1].split(".")[0].split("_")
+        if file_split[0] == "학과":
+            department_name = file_split[1] + "-" + file_split[2]
 
-        department_name_to_id[department_name] = file[0]
-        department_id_to_name.append(department_name)
+            department_name_to_id[department_name] = file[0]
+            department_id_to_name.append(department_name)
+        elif file_split[0] == "기타":
+            department_name = "기타-" + file_split[1]
+
+            department_name_to_id[department_name] = file[0]
+            department_id_to_name.append(department_name)
 
     return department_name_to_id, department_id_to_name
 
