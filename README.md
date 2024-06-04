@@ -4,7 +4,28 @@
 ## Logic
 
 ### 1. Filtering
-열심히 만드는 중...
+#### Filtering Class
+- 클래스 설명
+  - 필터링 인터페이스
+
+<details>
+  <summary>클래스 구성</summary>
+  
+  ##### Filtering
+  - private 변수
+    - __department_name_to_id: dict
+    - __department_id_to_name: list[str]
+    - __department_course_df_list: list[DataFrame]
+    - __entire_course_df: DataFrame
+    - __entire_course_bit_df: DataFrame
+    - __course_by_all_time: list[list[DataFrame]]
+  - private 함수
+    - __import_processed_data
+
+  - public 함수
+    - search_course_routine
+
+</details>
 
 ### 2. Making
 열심히 만드는 중...
