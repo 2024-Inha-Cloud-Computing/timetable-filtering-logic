@@ -43,3 +43,22 @@
   - **output** DataFrame
 
 </details>
+
+#### time_str_to_bit
+- 모듈 설명
+  - DataFrame 내부의 string 형태의 시간을 bit로 변환하는 모듈
+  
+<details>
+  <summary>함수 구성</summary>
+  
+  ##### time_str_to_bit
+  - string 형태의 시간을 bit로 변환하는 함수
+  - **input** string 형태의 시간
+  - **output** bit로 변환된 시간
+
+  ##### time_str_to_bit_df
+  - DataFrame 내부의 string 형태의 시간 column 전체를 bit로 변환하는 함수
+  - **input** 변환 전 DataFrame, column 이름
+  - **output** 변환 후 DataFrame
+  
+</details>
