@@ -62,3 +62,22 @@
   - **output** 변환 후 DataFrame
   
 </details>
+
+#### course_by_time
+- 모듈 설명
+  - 특정 시간의 강의들의 집합을 반환하는 모듈
+
+<details>
+  <summary>함수 구성</summary>
+  
+  ##### course_by_time
+  - 시간을 입력받으면 해당 시간에 열리는 강의들의 집합을 반환하는 함수
+  - **input** DataFrame, bit로 변환된 시간
+  - **output** DataFrame
+
+  ##### course_by_all_time
+  - 모든 시간에 대해 열리는 강의들의 집합을 반환하는 함수
+  - **input** DataFrame
+  - **output** DataFrame list
+
+</details>
