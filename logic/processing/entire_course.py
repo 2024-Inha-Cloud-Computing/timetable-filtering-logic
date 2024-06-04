@@ -20,7 +20,7 @@ def merge_all_data(data_list):
     # print(duplicated)
 
     # 중복된 학수번호를 가진 행을 제거
-    merged_data = merged_data.drop_duplicates(subset="course_class_id", keep="first")
+    merged_data = merged_data.drop_duplicates(subset="course_class_id", keep="first", ignore_index=True)
     
     return merged_data
 
