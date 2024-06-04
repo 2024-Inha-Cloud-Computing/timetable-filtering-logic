@@ -15,6 +15,10 @@ def merge_all_data(data_list):
     # 학수번호를 기준으로 정렬
     merged_data = merged_data.sort_values(by="course_class_id", ignore_index=True)
 
+    # 중복된 학수번호를 출력하는 테스트 코드
+    # duplicated = merged_data[merged_data.duplicated(subset="course_class_id", keep=False)]
+    # print(duplicated)
+
     # 중복된 학수번호를 가진 행을 제거
     merged_data = merged_data.drop_duplicates(subset="course_class_id", keep="first")
     
