@@ -3,6 +3,7 @@
 import import_csv
 import entire_course
 import time_str_to_bit
+import course_by_time
 
 # import_csv 모듈 테스트 코드
 RAW_PATH = "resource/raw"
@@ -29,9 +30,27 @@ RAW_PATH = "resource/raw"
 
 imported_data = import_csv.import_csv(RAW_PATH)
 merged_data = entire_course.merge_all_data(imported_data)
-merged_data_time_bit = time_str_to_bit.time_str_to_bit_df(merged_data, "time_classroom")
+merged_data_time_bit = time_str_to_bit.time_str_to_bit_df(
+    merged_data.copy(), "time_classroom"
+)
 
 merged_data_time_bit.to_csv(
     "export/time_str_to_bit/merged_data_time_bit.csv", index=False
 )
 print(merged_data_time_bit)
+
+
+# course_by_time 모듈 테스트 코드
+RAW_PATH = "resource/raw"
+
+imported_data = import_csv.import_csv(RAW_PATH)
+merged_data = entire_course.merge_all_data(imported_data)
+merged_data_time_bit = time_str_to_bit.time_str_to_bit_df(
+    merged_data.copy(), "time_classroom"
+)
+course_by_all_time = course_by_time.course_by_all_time(merged_data_time_bit)
+
+for day_index, day in enumerate(course_by_all_time):
+    for time_index, time in enumerate(day):
+        time.to_csv(f"export/course_by_time/{day_index}_{time_index}.csv", index=False)
+print(course_by_all_time)
