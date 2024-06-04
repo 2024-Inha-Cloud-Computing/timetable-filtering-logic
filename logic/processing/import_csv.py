@@ -1,14 +1,15 @@
-# csv로 저장된 raw data를 읽어오는 모듈
+# 각 학과 별 csv 파일 생성 모듈
 
 import os
 import pandas as pd
 
-# 현재 저장된 csv 파일명에 따라 학부과-전공명 <-> id dict, list를 만드는 함수
-# input: 저장된 csv 파일의 경로
+
+# 현재 저장된 csv 파일명에 따라 [학부과-전공명 <-> id] 간의 변환이 가능한 dict, list를 만드는 함수
+# input: csv 파일(raw data)의 경로
 # output: 학부과-전공명 -> id dict, id -> 학부과-전공명 list
 def get_department_dict(csv_path):
     department_name_to_id = {}
-    id_to_department_name = []
+    department_id_to_name = []
 
     # csv 파일의 파일명을 읽어옴
     csv_files = os.listdir(csv_path)
@@ -20,30 +21,22 @@ def get_department_dict(csv_path):
         department_name = file_split[0] + "-" + file_split[1]
 
         department_name_to_id[department_name] = file[0]
-        id_to_department_name.append(department_name)
+        department_id_to_name.append(department_name)
 
-    return department_name_to_id, id_to_department_name
+    return department_name_to_id, department_id_to_name
 
 
-# csv 파일들을 DataFrame으로 읽어와서 list로 반환하는 함수
-# input: csv 파일의 경로
+# 읽어온 csv 파일(raw data)을 DataFrame의 list로 반환하는 함수
+# input: csv 파일(raw data)의 경로
 # output: DataFrame list
 def import_csv(csv_path):
     csv_files = os.listdir(csv_path)
     csv_files.sort()
 
-    data_list = []
+    df_list = []
     for file in csv_files:
-        data = pd.read_csv(csv_path + "/" + file)
-        data_list.append(data)
+        file_path = os.path.join(csv_path, file)
+        df = pd.read_csv(file_path)
+        df_list.append(df)
 
-    return data_list
-
-
-# 테스트 코드
-# RAW_PATH = "resource/raw"
-
-# department_name_to_id, id_to_department_name = get_department_dict(RAW_PATH)
-# imported_data = import_csv(RAW_PATH)
-
-# print(imported_data[department_name_to_id["컴퓨터공학과-컴퓨터공학"]])
+    return df_list
