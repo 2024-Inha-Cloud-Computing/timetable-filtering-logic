@@ -1,1 +1,3 @@
-course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes
+1548,GED1010-001,GED1010,1,오래된 미래: 동양고전에서의 인간다움,전체,3.0,교양선택,[  0   0   0   0   0   0 256],윤인현,상대평가,※기말 : 6월 23일 10:00 ~ 10:55
+1577,GED3018-001,GED3018,1,그래픽 디자인 이야기,전체,3.0,교양선택,[  0   0   0   0   0   0 256],강현주,Pass/Fail,※기말 : 6월 23일 10:00 ~ 10:55

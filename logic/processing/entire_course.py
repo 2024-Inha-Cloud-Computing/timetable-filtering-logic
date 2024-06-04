@@ -6,7 +6,7 @@ import pandas as pd
 # 학과 별 강의 데이터를 모두 합쳐서 하나의 DataFrame으로 만드는 함수
 # input: DataFrame list
 # output: DataFrame
-def merge_all_data(df_list_by_department):
+def get_entire_course_df(df_list_by_department):
     entire_course_df = pd.DataFrame()
 
     # 모든 DataFrame을 하나로 병합

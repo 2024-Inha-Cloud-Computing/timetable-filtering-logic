@@ -1,1 +1,3 @@
-course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes
+1565,GED2016-001,GED2016,1,그리스신화의 이해,전체,3.0,교양선택,[   0    0    0    0    0    0 8192],조병준,상대평가,※기말 : 6월 23일 16:00 ~ 16:55
+1568,GED3002-001,GED3002,1,영화로보는문학세계,전체,3.0,교양선택,[   0    0    0    0    0    0 8192],김상원,상대평가,※기말 : 6월 23일 16:00 ~ 16:55

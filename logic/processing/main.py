@@ -22,14 +22,14 @@ print(df_list_by_departement[department_name_to_id["컴퓨터공학과-컴퓨터
 
 # [entire_course 모듈] 학과별 csv 파일을 하나로 병합한 csv 파일 생성
 df_list_by_departement = import_csv.import_csv(RAW_PATH)
-entire_course_df = entire_course.merge_all_data(df_list_by_departement)
+entire_course_df = entire_course.get_entire_course_df(df_list_by_departement)
 
 entire_course_df.to_csv(f"{PROCESSED_PATH}/entire_course/entire_course.csv")
 
 # 출력 테스트 코드
 print(entire_course_df)
 
-# time_str_to_bit 모듈 테스트 코드
+# [time_str_to_bit 모듈] 시간 문자열을 bit로 변환한 csv 파일 생성
 print(time_str_to_bit.time_str_to_bit("화9"))
 
 entire_course_bit_df = time_str_to_bit.time_str_to_bit_df(
@@ -40,17 +40,12 @@ entire_course_bit_df.to_csv(f"{PROCESSED_PATH}/time_str_to_bit/entire_course_bit
 print(entire_course_bit_df)
 
 
-# # course_by_time 모듈 테스트 코드
-# RAW_PATH = "resource/raw"
+# [course_by_time 모듈] 특정 시간 강의들의 csv 파일 생성
+course_by_all_time = course_by_time.get_course_by_all_time(entire_course_bit_df)
 
-# df_list_by_departement = import_csv.import_csv(RAW_PATH)
-# merged_data = entire_course.merge_all_data(df_list_by_departement)
-# merged_data_time_bit = time_str_to_bit.time_str_to_bit_df(
-#     merged_data.copy(), "time_classroom"
-# )
-# course_by_all_time = course_by_time.course_by_all_time(merged_data_time_bit)
+for day_index, day_df_list in enumerate(course_by_all_time):
+    for time_index, time_df in enumerate(day_df_list):
+        time_df.to_csv(f"{PROCESSED_PATH}/course_by_time/{day_index}_{time_index}.csv")
 
-# for day_index, day in enumerate(course_by_all_time):
-#     for time_index, time in enumerate(day):
-#         time.to_csv(f"export/course_by_time/{day_index}_{time_index}.csv", index=False)
-# print(course_by_all_time)
+# 출력 테스트 코드
+print(course_by_all_time)
