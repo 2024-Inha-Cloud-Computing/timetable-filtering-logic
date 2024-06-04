@@ -17,7 +17,7 @@ def get_department_dict(csv_path):
     # csv 파일명을 통해 학부과-전공명을 추출
     for file in enumerate(csv_files):
         file_split = file[1].split("_")
-        department_name = file_split[0] + "-" + file_split[3]
+        department_name = file_split[0] + "-" + file_split[1]
 
         department_name_to_id[department_name] = file[0]
         id_to_department_name.append(department_name)
