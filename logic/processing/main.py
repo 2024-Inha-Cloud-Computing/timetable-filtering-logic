@@ -24,26 +24,20 @@ print(df_list_by_departement[department_name_to_id["컴퓨터공학과-컴퓨터
 df_list_by_departement = import_csv.import_csv(RAW_PATH)
 entire_course_df = entire_course.merge_all_data(df_list_by_departement)
 
-entire_course_df.to_csv(
-    f"{PROCESSED_PATH}/entire_course/entire_course.csv", index=False
-)
+entire_course_df.to_csv(f"{PROCESSED_PATH}/entire_course/entire_course.csv")
 
 # 출력 테스트 코드
 print(entire_course_df)
 
-# # time_str_to_bit 모듈 테스트 코드
-# RAW_PATH = "resource/raw"
+# time_str_to_bit 모듈 테스트 코드
+print(time_str_to_bit.time_str_to_bit("화9"))
 
-# df_list_by_departement = import_csv.import_csv(RAW_PATH)
-# merged_data = entire_course.merge_all_data(df_list_by_departement)
-# merged_data_time_bit = time_str_to_bit.time_str_to_bit_df(
-#     merged_data.copy(), "time_classroom"
-# )
+entire_course_bit_df = time_str_to_bit.time_str_to_bit_df(
+    entire_course_df, "time_classroom"
+)
 
-# merged_data_time_bit.to_csv(
-#     "export/time_str_to_bit/merged_data_time_bit.csv", index=False
-# )
-# print(merged_data_time_bit)
+entire_course_bit_df.to_csv(f"{PROCESSED_PATH}/time_str_to_bit/entire_course_bit.csv")
+print(entire_course_bit_df)
 
 
 # # course_by_time 모듈 테스트 코드
