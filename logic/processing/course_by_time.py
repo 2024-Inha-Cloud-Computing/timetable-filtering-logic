@@ -5,8 +5,8 @@ import numpy as np
 
 
 # 시간을 입력받으면 해당 시간과 겹치는 강의 목록을 반환하는 함수
-# input: DataFrame, bit ndarray로 변환된 시간
-# output: DataFrame
+# input: 강의가 담긴 DataFrame, ndarray 형태의 시간
+# output: 겹치는 강의가 담긴 DataFrame
 def get_course_by_time(df, time):
     course_by_time = pd.DataFrame(columns=df.columns)
 
@@ -18,8 +18,8 @@ def get_course_by_time(df, time):
 
 
 # 각각의 시간 단위와 겹치는 강의들의 DataFrame list를 반환하는 함수
-# input: DataFrame
-# output: DataFrame list
+# input: 강의가 담긴 DataFrame
+# output: 각 시간 단위에 겹치는 강의들의 DataFrame list
 def get_course_by_all_time(df):
     DAY_CNT = 7
     TIME_CNT = 31
