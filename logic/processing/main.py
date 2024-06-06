@@ -23,9 +23,9 @@ PROCESSED_IMPORT_COURSE_PATH = f"{PROCESSED_IMPORT_PATH}/course"
 PROCESSED_IMPORT_CURRICULUM_PATH = f"{PROCESSED_IMPORT_PATH}/curriculum"
 
 # [import_csv 모듈] 학과별 강의/커리큘럼 & 인덱싱 csv 파일 생성
-# department_name_to_id_for_course, department_id_to_name_for_course dict, list 생성
-department_name_to_id_for_course, department_id_to_name_for_course = (
-    get_department_dict(RAW_COURSE_PATH)
+# department_name_to_id_for_course, department_id_to_name_for_course dict, df_course_list 생성
+department_name_to_id_for_course, department_id_to_name_for_course, df_course_list = (
+    import_routine(RAW_COURSE_PATH)
 )
 
 # 만들어진 dict와 list를 DataFrame으로 변환
@@ -44,24 +44,22 @@ department_id_to_name_for_course_df.to_csv(
     f"{PROCESSED_DEPARTMENT_INDEX_PATH}/department_id_to_name_for_course.csv"
 )
 
-# 출력 테스트 코드
-print(department_name_to_id_for_course)
-print(department_id_to_name_for_course)
-
-# 학과별 강의 csv 파일 생성
-df_course_list = import_csv(RAW_COURSE_PATH)
-
+# 학과별 csv 파일로 저장
 for department_id, df in enumerate(df_course_list):
     department_name = department_id_to_name_for_course[department_id]
     df.to_csv(f"{PROCESSED_IMPORT_COURSE_PATH}/{department_name}.csv")
 
 # 출력 테스트 코드
+print(department_name_to_id_for_course)
+print(department_id_to_name_for_course)
 print(df_course_list[department_name_to_id_for_course["컴퓨터공학과-컴퓨터공학"]])
 
-# department_name_to_id_for_curriculum, department_id_to_name_for_curriculum dict, list 생성
-department_name_to_id_for_curriculum, department_id_to_name_for_curriculum = (
-    get_department_dict(RAW_CURRICULUM_PATH)
-)
+# department_name_to_id_for_curriculum, department_id_to_name_for_curriculum dict, df_curriculum_list 생성
+(
+    department_name_to_id_for_curriculum,
+    department_id_to_name_for_curriculum,
+    df_curriculum_list,
+) = import_routine(RAW_CURRICULUM_PATH)
 
 # 만들어진 dict와 list를 DataFrame으로 변환
 department_name_to_id_for_curriculum_df = pd.DataFrame.from_dict(
@@ -79,22 +77,17 @@ department_id_to_name_for_curriculum_df.to_csv(
     f"{PROCESSED_DEPARTMENT_INDEX_PATH}/department_id_to_name_for_curriculum.csv"
 )
 
-# 출력 테스트 코드
-print(department_name_to_id_for_curriculum)
-print(department_id_to_name_for_curriculum)
-
-# 학과별 커리큘럼 csv 파일 생성
-df_curriculum_list = import_csv(RAW_CURRICULUM_PATH)
-
+# 학과별 csv 파일로 저장
 for department_id, df in enumerate(df_curriculum_list):
     department_name = department_id_to_name_for_curriculum[department_id]
     df.to_csv(f"{PROCESSED_IMPORT_CURRICULUM_PATH}/{department_name}.csv")
 
 # 출력 테스트 코드
+print(department_name_to_id_for_curriculum)
+print(department_id_to_name_for_curriculum)
 print(
     df_curriculum_list[department_name_to_id_for_curriculum["컴퓨터공학과-컴퓨터공학"]]
 )
-exit()
 
 # [entire_course 모듈] 학과별 csv 파일을 하나로 병합한 csv 파일 생성
 entire_course_df = get_entire_course_df(df_course_list)

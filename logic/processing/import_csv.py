@@ -6,10 +6,10 @@ import unicodedata
 import pandas as pd
 
 
-# 현재 저장된 csv 파일명에 따라 [학부과-전공명 <-> id] 간의 변환이 가능한 dict, list를 만드는 함수
+# csv 파일을 읽어와서 인덱스와 DataFrame list로 반환하는 함수
 # input: csv 파일(raw data)의 경로
-# output: 학부과-전공명 -> id dict, id -> 학부과-전공명 list
-def get_department_dict(csv_path):
+# output: 학과별 id <-> 학과명 dict, DataFrame list
+def import_routine(csv_path):
     # csv 파일의 파일명을 읽어옴
     csv_files = os.listdir(csv_path)
 
@@ -19,6 +19,13 @@ def get_department_dict(csv_path):
     # "학과"로 시작하는 파일명을 "기타"로 시작하는 파일명보다 앞서게 정렬
     csv_files.sort(key=sort_csv_file)
 
+    return *get_department_dict(csv_files), import_csv(csv_path, csv_files)
+
+
+# 현재 저장된 csv 파일명에 따라 [학부과-전공명 <-> id] 간의 변환이 가능한 dict, list를 만드는 함수
+# input: csv 파일명 list
+# output: 학부과-전공명 -> id dict, id -> 학부과-전공명 list
+def get_department_dict(csv_files):
     department_name_to_id = {}
     department_id_to_name = []
 
@@ -42,18 +49,9 @@ def get_department_dict(csv_path):
 
 
 # 읽어온 csv 파일(raw data)을 DataFrame의 list로 반환하는 함수
-# input: csv 파일(raw data)의 경로
+# input: csv 파일(raw data)의 경로, csv 파일명 list
 # output: DataFrame list
-def import_csv(csv_path):
-    # csv 파일의 파일명을 읽어옴
-    csv_files = os.listdir(csv_path)
-
-    # 파일명을 NFC로 normalize
-    csv_files = [unicodedata.normalize("NFC", x) for x in csv_files]
-
-    # "학과"로 시작하는 파일명을 "기타"로 시작하는 파일명보다 앞서게 정렬
-    csv_files.sort(key=sort_csv_file)
-
+def import_csv(csv_path, csv_files):
     df_list = []
     for file in csv_files:
         FILE_PATH = f"{csv_path}/{file}"
