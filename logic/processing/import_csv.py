@@ -1,4 +1,5 @@
-# 각 학과 별 csv 파일 생성 모듈
+# 학과 강의 및 커리큘럼 csv 파일 생성 모듈
+
 
 import os
 import pandas as pd
@@ -13,22 +14,27 @@ def get_department_dict(csv_path):
 
     # csv 파일의 파일명을 읽어옴
     csv_files = os.listdir(csv_path)
-    csv_files.sort()
+
+    csv_files = [str(x) for x in csv_files]
+
+    # "학과"로 시작하는 파일명을 "기타"로 시작하는 파일명보다 앞서게 정렬
+    csv_files.sort(key=sort_csv_file)
 
     # csv 파일명을 통해 학부과-전공명을 추출
     for file in enumerate(csv_files):
         # 확장자 제거 및 "_"로 split
-        file_split = file[1].split(".")[0].split("_")
-        if file_split[0] == "학과":
-            department_name = file_split[1] + "-" + file_split[2]
+        file_remove_extension = file[1].split(".")[0]
+        file_split = file_remove_extension.split("_")
+        if file_split[0] == "기타":
+            DEPARTMENT_NAME = "기타-" + file_split[1]
 
-            department_name_to_id[department_name] = file[0]
-            department_id_to_name.append(department_name)
-        elif file_split[0] == "기타":
-            department_name = "기타-" + file_split[1]
+            department_name_to_id[DEPARTMENT_NAME] = file[0]
+            department_id_to_name.append(DEPARTMENT_NAME)
+        else:
+            DEPARTMENT_NAME = file_split[1] + "-" + file_split[2]
 
-            department_name_to_id[department_name] = file[0]
-            department_id_to_name.append(department_name)
+            department_name_to_id[DEPARTMENT_NAME] = file[0]
+            department_id_to_name.append(DEPARTMENT_NAME)
 
     return department_name_to_id, department_id_to_name
 
@@ -38,12 +44,24 @@ def get_department_dict(csv_path):
 # output: DataFrame list
 def import_csv(csv_path):
     csv_files = os.listdir(csv_path)
-    csv_files.sort()
+    csv_files.sort(key=sort_csv_file)
 
     df_list = []
     for file in csv_files:
-        file_path = os.path.join(csv_path, file)
-        df = pd.read_csv(file_path)
+        FILE_PATH = f"{csv_path}/{file}"
+        df = pd.read_csv(FILE_PATH)
         df_list.append(df)
 
     return df_list
+
+
+# csv 파일 이름 정렬 key 함수
+# input: csv 파일명
+# output: 정렬 기준
+def sort_csv_file(file):
+    file_remove_extension = file.split(".")[0]
+    file_split = file_remove_extension.split("_")
+    if file_split[0] == "기타":
+        return (1, file)
+    else:
+        return (0, file)
