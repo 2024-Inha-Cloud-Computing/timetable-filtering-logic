@@ -16,6 +16,7 @@ PROCESSED_IMPORT_PATH = f"{PROCESSED_PATH}/import_csv"
 PROCESSED_ENTIRE_COURSE_PATH = f"{PROCESSED_PATH}/entire_course"
 PROCESSED_TIME_STR_TO_BIT_PATH = f"{PROCESSED_PATH}/time_str_to_bit"
 PROCESSED_COURSE_BY_TIME_PATH = f"{PROCESSED_PATH}/course_by_time"
+PROCESSED_COURSE_BY_DEPARTMENT_PATH = f"{PROCESSED_PATH}/course_by_department"
 
 
 # [import_csv 모듈] 학과별 강의/커리큘럼 & 인덱싱 csv 파일 생성
@@ -60,6 +61,7 @@ def import_csv_module(data_type):
     print(department_name_to_id)
     print(department_id_to_name)
     print(df_list[department_name_to_id["컴퓨터공학과-컴퓨터공학"]])
+    print("import_csv_module 출력 끝.")
 
     return department_name_to_id, department_id_to_name, df_list
 
@@ -74,6 +76,7 @@ def entire_course_module(df_course_list):
 
     # 출력 테스트 코드
     print(entire_course_df)
+    print("entire_course_module 출력 끝.")
 
     return entire_course_df
 
@@ -90,6 +93,7 @@ def time_str_to_bit_module(entire_course_df):
 
     # 출력 테스트 코드
     print(entire_course_bit_df)
+    print("time_str_to_bit_module 출력 끝.")
 
     return entire_course_bit_df
 
@@ -108,6 +112,7 @@ def course_by_time_module(entire_course_bit_df):
 
     # 출력 테스트 코드
     print(course_by_all_time[3][10])
+    print("course_by_time_module 출력 끝.")
 
 
 # [course_by_department 모듈]각 학과가 들어야하는 강의를 교양, 전공으로 분류한 csv 파일 생성
@@ -115,6 +120,7 @@ def course_by_time_module(entire_course_bit_df):
 # output: 학과별로 강의가 추가된 DataFrame 2차원 list (전공, 교양필수, 교양선택)
 def course_by_department_module(
     df_course_list,
+    entire_course_bit_df,
     department_id_to_name_for_curriculum,
     department_name_to_id_for_course,
 ):
@@ -125,10 +131,36 @@ def course_by_department_module(
     # 학과 이름이 df_course_list에 있으면, 해당 강의를 전공과 교양필수로 나누어 DataFrame에 추가
     department_possible_df_list = add_include_course_to_department_possible_df(
         df_course_list,
+        entire_course_bit_df,
         department_possible_df_list,
         department_id_to_name_for_curriculum,
         department_name_to_id_for_course,
     )
+
+    add_geb_to_department_possible_df(
+        entire_course_bit_df,
+        df_curriculum_list,
+        department_possible_df_list,
+        department_id_to_name_for_curriculum,
+    )
+
+    add_ged_to_department_possible_df(
+        entire_course_bit_df,
+        df_curriculum_list,
+        department_possible_df_list,
+        department_id_to_name_for_curriculum,
+    )
+
+    # csv 파일로 저장
+    for department_id, department_name in enumerate(
+        department_id_to_name_for_curriculum
+    ):
+        department_possible_df_list[department_id][0].to_csv(
+            f"{PROCESSED_COURSE_BY_DEPARTMENT_PATH}/{department_name}_major.csv"
+        )
+        department_possible_df_list[department_id][1].to_csv(
+            f"{PROCESSED_COURSE_BY_DEPARTMENT_PATH}/{department_name}_liberal_required.csv"
+        )
 
     # 출력 테스트 코드
     print(
@@ -136,8 +168,7 @@ def course_by_department_module(
             department_name_to_id_for_curriculum["컴퓨터공학과-컴퓨터공학"]
         ]
     )
-
-    return department_possible_df_list
+    print("course_by_department_module 출력 끝.")
 
 
 # main 함수
@@ -171,6 +202,7 @@ if __name__ == "__main__":
 
     department_possible_df_list = course_by_department_module(
         df_course_list,
+        entire_course_bit_df,
         department_id_to_name_for_curriculum,
         department_name_to_id_for_course,
     )
