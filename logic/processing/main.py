@@ -107,12 +107,12 @@ def course_by_time_module(entire_course_bit_df):
             )
 
     # 출력 테스트 코드
-    print(course_by_all_time)
+    print(course_by_all_time[3][10])
 
 
 # [course_by_department 모듈]각 학과가 들어야하는 강의를 교양, 전공으로 분류한 csv 파일 생성
 # input: df_course_list, department_possible_df_list, department_id_to_name_for_curriculum, department_name_to_id_for_course
-# output: 학과별로 강의가 추가된 DataFrame 2차원 list (전공, 교양)
+# output: 학과별로 강의가 추가된 DataFrame 2차원 list (전공, 교양필수, 교양선택)
 def course_by_department_module(
     df_course_list,
     department_id_to_name_for_curriculum,
@@ -122,8 +122,8 @@ def course_by_department_module(
     department_possible_df_list = create_empty_department_possible_df(
         department_id_to_name_for_curriculum
     )
-    # 학과 이름이 df_course_list에 있으면, 해당 강의를 DataFrame에 추가
-    department_possible_df_list = add_course_to_department_possible_df(
+    # 학과 이름이 df_course_list에 있으면, 해당 강의를 전공과 교양필수로 나누어 DataFrame에 추가
+    department_possible_df_list = add_include_course_to_department_possible_df(
         df_course_list,
         department_possible_df_list,
         department_id_to_name_for_curriculum,
@@ -131,7 +131,11 @@ def course_by_department_module(
     )
 
     # 출력 테스트 코드
-    print(department_possible_df_list)
+    print(
+        department_possible_df_list[
+            department_name_to_id_for_curriculum["컴퓨터공학과-컴퓨터공학"]
+        ]
+    )
 
     return department_possible_df_list
 
@@ -145,6 +149,7 @@ if __name__ == "__main__":
     department_id_to_name_for_course = None
     department_id_to_name_for_curriculum = None
 
+    # csv 파일을 불러와 여러 변수로 저장
     for data_type in ["course", "curriculum"]:
         department_name_to_id, department_id_to_name, df_list = import_csv_module(
             data_type
@@ -159,6 +164,7 @@ if __name__ == "__main__":
             department_name_to_id_for_curriculum = department_name_to_id
             department_id_to_name_for_curriculum = department_id_to_name
 
+    # 모듈 실행
     entire_course_df = entire_course_module(df_course_list)
     entire_course_bit_df = time_str_to_bit_module(entire_course_df)
     course_by_time_module(entire_course_bit_df)
