@@ -6,6 +6,7 @@ from import_csv import *
 from entire_course import *
 from time_str_to_bit import *
 from course_by_time import *
+from course_by_department import *
 
 RESOURCE_PATH = "resource"
 RAW_PATH = f"{RESOURCE_PATH}/raw"
@@ -60,7 +61,7 @@ def import_csv_module(data_type):
     print(department_id_to_name)
     print(df_list[department_name_to_id["컴퓨터공학과-컴퓨터공학"]])
 
-    return df_list
+    return department_name_to_id, department_id_to_name, df_list
 
 
 # [entire_course 모듈] 학과별 csv 파일을 하나로 병합한 csv 파일 생성
@@ -109,12 +110,61 @@ def course_by_time_module(entire_course_bit_df):
     print(course_by_all_time)
 
 
+# [course_by_department 모듈]각 학과가 들어야하는 강의를 교양, 전공으로 분류한 csv 파일 생성
+# input: df_course_list, department_possible_df_list, department_id_to_name_for_curriculum, department_name_to_id_for_course
+# output: 학과별로 강의가 추가된 DataFrame 2차원 list (전공, 교양)
+def course_by_department_module(
+    df_course_list,
+    department_id_to_name_for_curriculum,
+    department_name_to_id_for_course,
+):
+    # 커리큘럼에 있는 학과를 토대로 DataFrame을 생성
+    department_possible_df_list = create_empty_department_possible_df(
+        department_id_to_name_for_curriculum
+    )
+    # 학과 이름이 df_course_list에 있으면, 해당 강의를 DataFrame에 추가
+    department_possible_df_list = add_course_to_department_possible_df(
+        df_course_list,
+        department_possible_df_list,
+        department_id_to_name_for_curriculum,
+        department_name_to_id_for_course,
+    )
+
+    # 출력 테스트 코드
+    print(department_possible_df_list)
+
+    return department_possible_df_list
+
+
 # main 함수
 if __name__ == "__main__":
+    df_course_list = None
+    df_curriculum_list = None
+    department_name_to_id_for_course = None
+    department_name_to_id_for_curriculum = None
+    department_id_to_name_for_course = None
+    department_id_to_name_for_curriculum = None
+
     for data_type in ["course", "curriculum"]:
-        df_list = import_csv_module(data_type)
+        department_name_to_id, department_id_to_name, df_list = import_csv_module(
+            data_type
+        )
 
         if data_type == "course":
-            entire_course_df = entire_course_module(df_list)
-            entire_course_bit_df = time_str_to_bit_module(entire_course_df)
-            course_by_time_module(entire_course_bit_df)
+            df_course_list = df_list
+            department_name_to_id_for_course = department_name_to_id
+            department_id_to_name_for_course = department_id_to_name
+        elif data_type == "curriculum":
+            df_curriculum_list = df_list
+            department_name_to_id_for_curriculum = department_name_to_id
+            department_id_to_name_for_curriculum = department_id_to_name
+
+    entire_course_df = entire_course_module(df_course_list)
+    entire_course_bit_df = time_str_to_bit_module(entire_course_df)
+    course_by_time_module(entire_course_bit_df)
+
+    department_possible_df_list = course_by_department_module(
+        df_course_list,
+        department_id_to_name_for_curriculum,
+        department_name_to_id_for_course,
+    )
