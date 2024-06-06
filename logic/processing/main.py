@@ -94,6 +94,7 @@ for department_id, df in enumerate(df_curriculum_list):
 print(
     df_curriculum_list[department_name_to_id_for_curriculum["컴퓨터공학과-컴퓨터공학"]]
 )
+exit()
 
 # [entire_course 모듈] 학과별 csv 파일을 하나로 병합한 csv 파일 생성
 entire_course_df = get_entire_course_df(df_course_list)

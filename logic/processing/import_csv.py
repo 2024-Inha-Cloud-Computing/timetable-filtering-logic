@@ -2,6 +2,7 @@
 
 
 import os
+import unicodedata
 import pandas as pd
 
 
@@ -9,16 +10,17 @@ import pandas as pd
 # input: csv 파일(raw data)의 경로
 # output: 학부과-전공명 -> id dict, id -> 학부과-전공명 list
 def get_department_dict(csv_path):
-    department_name_to_id = {}
-    department_id_to_name = []
-
     # csv 파일의 파일명을 읽어옴
     csv_files = os.listdir(csv_path)
 
-    csv_files = [str(x) for x in csv_files]
+    # 파일명을 NFC로 normalize
+    csv_files = [unicodedata.normalize("NFC", x) for x in csv_files]
 
     # "학과"로 시작하는 파일명을 "기타"로 시작하는 파일명보다 앞서게 정렬
     csv_files.sort(key=sort_csv_file)
+
+    department_name_to_id = {}
+    department_id_to_name = []
 
     # csv 파일명을 통해 학부과-전공명을 추출
     for file in enumerate(csv_files):
@@ -43,7 +45,13 @@ def get_department_dict(csv_path):
 # input: csv 파일(raw data)의 경로
 # output: DataFrame list
 def import_csv(csv_path):
+    # csv 파일의 파일명을 읽어옴
     csv_files = os.listdir(csv_path)
+
+    # 파일명을 NFC로 normalize
+    csv_files = [unicodedata.normalize("NFC", x) for x in csv_files]
+
+    # "학과"로 시작하는 파일명을 "기타"로 시작하는 파일명보다 앞서게 정렬
     csv_files.sort(key=sort_csv_file)
 
     df_list = []
