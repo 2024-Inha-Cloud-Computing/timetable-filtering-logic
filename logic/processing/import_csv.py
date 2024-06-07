@@ -1,6 +1,5 @@
 # 학과 강의 및 커리큘럼 csv 파일 생성 모듈
 
-
 import os
 import unicodedata
 import pandas as pd

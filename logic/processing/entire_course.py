@@ -4,7 +4,7 @@ import pandas as pd
 
 
 # 학과 별 강의 데이터를 모두 합쳐서 하나의 DataFrame으로 만드는 함수
-# input: 학과 별 강의가 담긴 DataFrame list
+# input: 학과별 강의가 담긴 DataFrame list
 # output: 모든 학과의 강의가 담긴 DataFrame
 def get_entire_course_df(df_list_by_department):
     entire_course_df = pd.DataFrame()
