@@ -1,12 +1,12 @@
-# 특정 시간 강의들의 DataFrame을 반환하는 모듈
+# 특정 시간 강의의 DataFrame을 반환하는 모듈
 
 import pandas as pd
 import numpy as np
 
 
-# 시간을 입력받으면 해당 시간과 겹치는 강의 목록을 반환하는 함수
-# input: DataFrame, bit ndarray로 변환된 시간
-# output: DataFrame
+# 시간을 입력받으면 해당 시간에 열리는 강의 DataFrame을 반환하는 함수
+# input: 강의 DataFrame, bit ndarray 형태의 시간
+# output: 입력된 시간에 열리는 강의 DataFrame
 def get_course_by_time(df, time):
     course_by_time = pd.DataFrame(columns=df.columns)
 
@@ -17,16 +17,16 @@ def get_course_by_time(df, time):
     return course_by_time
 
 
-# 각각의 시간 단위와 겹치는 강의들의 DataFrame list를 반환하는 함수
-# input: DataFrame
-# output: DataFrame list
+# 개별 교시에 열리는 강의들의 DataFrame list를 반환하는 함수
+# input: 강의 DataFrame
+# output: 개별 교시에 열리는 강의 DataFrame list
 def get_course_by_all_time(df):
     DAY_CNT = 7
     TIME_CNT = 31
-    # 모든 시간에 대해 열리는 강의들을 저장할 list
+    # 개별 교시에 열리는 강의를 저장할 list
     course_by_all_time = [[] for _ in range(DAY_CNT)]
 
-    # 모든 시간에 대해 열리는 강의들을 course_by_all_time에 추가
+    # 개별 교시에 열리는 강의를 course_by_all_time에 추가
     for day in range(DAY_CNT):
         for time in range(TIME_CNT):
             time_argument = np.zeros(shape=DAY_CNT, dtype=np.uint32)
