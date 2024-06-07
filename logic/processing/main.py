@@ -71,38 +71,46 @@ def import_csv_module(data_type):
 # output: 모든 학과의 강의가 담긴 DataFrame
 def entire_course_module(df_course_list):
     entire_course_df = get_entire_course_df(df_course_list)
+    elective_course_df = get_elective_course_df(entire_course_df)
 
     entire_course_df.to_csv(f"{PROCESSED_ENTIRE_COURSE_PATH}/entire_course.csv")
+    elective_course_df.to_csv(f"{PROCESSED_ENTIRE_COURSE_PATH}/elective_course.csv")
 
     # 출력 테스트 코드
     print(entire_course_df)
+    print(elective_course_df)
     print("entire_course_module 출력 끝.")
 
-    return entire_course_df
+    return entire_course_df, elective_course_df
 
 
 # [time_str_to_bit 모듈] 시간 문자열을 bit로 변환한 csv 파일 생성
 # input: 모든 학과의 강의가 담긴 DataFrame
 # output: 시간 문자열을 bit로 변환한 DataFrame
-def time_str_to_bit_module(entire_course_df):
-    entire_course_bit_df = time_str_to_bit_df(entire_course_df, "time_classroom")
+def time_str_to_bit_module(entire_course_df, elective_course_df, column_name):
+    entire_course_bit_df = time_str_to_bit_df(entire_course_df, column_name)
+    elective_course_bit_df = time_str_to_bit_df(elective_course_df, column_name)
 
     entire_course_bit_df.to_csv(
         f"{PROCESSED_TIME_STR_TO_BIT_PATH}/entire_course_bit.csv"
     )
+    elective_course_bit_df.to_csv(
+        f"{PROCESSED_TIME_STR_TO_BIT_PATH}/elective_course_bit.csv"
+    )
 
     # 출력 테스트 코드
     print(entire_course_bit_df)
+    print(elective_course_bit_df)
     print("time_str_to_bit_module 출력 끝.")
 
-    return entire_course_bit_df
+    return entire_course_bit_df, elective_course_bit_df
 
 
 # [course_by_time 모듈] 특정 시간 강의들의 csv 파일 생성
 # input: 시간 문자열을 bit로 변환한 DataFrame
 # output: None
-def course_by_time_module(entire_course_bit_df):
-    course_by_all_time = get_course_by_all_time(entire_course_bit_df)
+def course_by_time_module(course_bit_df):
+    course_by_all_time = get_course_by_all_time(course_bit_df)
 
     for day_index, day_df_list in enumerate(course_by_all_time):
         for time_index, time_df in enumerate(day_df_list):
@@ -196,8 +204,10 @@ if __name__ == "__main__":
             department_id_to_name_for_curriculum = department_id_to_name
 
     # 모듈 실행
-    entire_course_df = entire_course_module(df_course_list)
-    entire_course_bit_df = time_str_to_bit_module(entire_course_df)
+    entire_course_df, elective_course_df = entire_course_module(df_course_list)
+    entire_course_bit_df, elective_course_bit_df = time_str_to_bit_module(
+        entire_course_df, elective_course_df, "time_classroom"
+    )
     course_by_time_module(entire_course_bit_df)
 
     department_possible_df_list = course_by_department_module(
