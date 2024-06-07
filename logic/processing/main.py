@@ -1,4 +1,4 @@
-# 학과 별 csv 파일을 메인 로직에서 사용하기 편하게 가공하는 모듈
+# 학과별 강의 csv 파일을 메인 로직(filtering, making)에서 사용하기 편하게 가공하는 모듈
 
 import pandas as pd
 
@@ -8,6 +8,7 @@ from time_str_to_bit import *
 from course_by_time import *
 from course_by_department import *
 
+# 파일 저장 경로
 RESOURCE_PATH = "resource"
 RAW_PATH = f"{RESOURCE_PATH}/raw"
 PROCESSED_PATH = f"{RESOURCE_PATH}/processed"
@@ -19,11 +20,11 @@ PROCESSED_COURSE_BY_TIME_PATH = f"{PROCESSED_PATH}/course_by_time"
 PROCESSED_COURSE_BY_DEPARTMENT_PATH = f"{PROCESSED_PATH}/course_by_department"
 
 
-# [import_csv 모듈] 학과별 강의/커리큘럼 & 인덱싱 csv 파일 생성
-# input: data_type (course 또는 curriculum)
-# output: 학과 별 강의 or 커리큘럼이 담긴 DataFrame list
+# [import_csv 모듈] 학과 강의 및 커리큘럼 csv 파일 생성
+# input: "course" 또는 "curriculum"
+# output: 학과별 강의 or 커리큘럼이 담긴 DataFrame list
 def import_csv_module(data_type):
-    # 학과별 강의/커리큘럼 & 인덱싱을 위한 변수 초기화
+    # csv 파일을 불러와 DataFrame list로 저장
     if data_type == "course":
         department_name_to_id, department_id_to_name, df_list = import_routine(
             f"{RAW_PATH}/{data_type}"
@@ -37,7 +38,7 @@ def import_csv_module(data_type):
             "타입 입력이 잘못되었습니다. 'course' 또는 'curriculum'을 입력해주세요."
         )
 
-    # csv로 변환하기 위한 DataFrame 생성
+    # csv로 변환하기 위한 DataFrame 변환
     department_name_to_id_df = pd.DataFrame.from_dict(
         department_name_to_id, orient="index", columns=["id"]
     )
@@ -66,9 +67,9 @@ def import_csv_module(data_type):
     return department_name_to_id, department_id_to_name, df_list
 
 
-# [entire_course 모듈] 학과별 csv 파일을 하나로 병합한 csv 파일 생성
-# input: 학과 별 강의가 담긴 DataFrame list
-# output: 모든 학과의 강의가 담긴 DataFrame
+# [entire_course 모듈] 전체 & 교양선택 강의 csv 파일 생성
+# input: 학과별 강의 DataFrame list
+# output: 전체 & 교양선택 강의 DataFrame
 def entire_course_module(df_course_list):
     entire_course_df = get_entire_course_df(df_course_list)
     elective_course_df = get_elective_course_df(entire_course_df)
@@ -84,9 +85,9 @@ def entire_course_module(df_course_list):
     return entire_course_df, elective_course_df
 
 
-# [time_str_to_bit 모듈] 시간 문자열을 bit로 변환한 csv 파일 생성
-# input: 모든 학과의 강의가 담긴 DataFrame
-# output: 시간 문자열을 bit로 변환한 DataFrame
+# [time_str_to_bit 모듈] DataFrame 내부의 string 형태의 시간을 bit ndarray로 변환한 csv 파일 생성
+# input: 전체 & 교양선택 강의 DataFrame
+# output: 시간이 bit ndarray로 변환된 DataFrame
 def time_str_to_bit_module(entire_course_df, elective_course_df, column_name):
     entire_course_bit_df = time_str_to_bit_df(entire_course_df, column_name)
     elective_course_bit_df = time_str_to_bit_df(elective_course_df, column_name)
@@ -106,8 +107,8 @@ def time_str_to_bit_module(entire_course_df, elective_course_df, column_name):
     return entire_course_bit_df, elective_course_bit_df
 
 
-# [course_by_time 모듈] 특정 시간 강의들의 csv 파일 생성
-# input: 시간 문자열을 bit로 변환한 DataFrame
+# [course_by_time 모듈] 특정 시간 강의의 csv 파일 생성
+# input: 시간이 bit ndarray로 변환된 DataFrame
 # output: None
 def course_by_time_module(course_bit_df):
     course_by_all_time = get_course_by_all_time(course_bit_df)
@@ -123,9 +124,12 @@ def course_by_time_module(course_bit_df):
     print("course_by_time_module 출력 끝.")
 
 
-# [course_by_department 모듈]각 학과가 들어야하는 강의를 교양, 전공으로 분류한 csv 파일 생성
-# input: df_course_list, department_possible_df_list, department_id_to_name_for_curriculum, department_name_to_id_for_course
-# output: 학과별로 강의가 추가된 DataFrame 2차원 list (전공, 교양필수, 교양선택)
+# [course_by_department 모듈] 각 학과가 들어야하는 강의를 교양, 전공으로 분류한 csv 파일 생성
+# input: 학과별 강의 DataFrame list
+#        전체 강의 DataFrame (시간이 bit ndarray로 변환된 DataFrame)
+#        커리큘럼에 있는 학과의 id -> 학과이름 변환 list
+#        강의시간표에 있는 학과의 학과이름 -> id 변환 dict
+# output: None
 def course_by_department_module(
     df_course_list,
     entire_course_bit_df,
@@ -145,6 +149,7 @@ def course_by_department_module(
         department_name_to_id_for_course,
     )
 
+    # 학과별 대학교교양필수(GEB) 과목을 교양필수 DataFrame에 추가
     add_geb_to_department_possible_df(
         entire_course_bit_df,
         df_curriculum_list,
@@ -152,6 +157,7 @@ def course_by_department_module(
         department_id_to_name_for_curriculum,
     )
 
+    # 학과별 핵심교양(GED) 과목을 교양필수 DataFrame에 추가
     add_ged_to_department_possible_df(
         entire_course_bit_df,
         df_curriculum_list,
@@ -181,6 +187,7 @@ def course_by_department_module(
 
 # main 함수
 if __name__ == "__main__":
+    # 변수 초기화
     df_course_list = None
     df_curriculum_list = None
     department_name_to_id_for_course = None
@@ -188,7 +195,7 @@ if __name__ == "__main__":
     department_id_to_name_for_course = None
     department_id_to_name_for_curriculum = None
 
-    # csv 파일을 불러와 여러 변수로 저장
+    # csv 파일을 불러와 사용할 변수로 저장
     for data_type in ["course", "curriculum"]:
         department_name_to_id, department_id_to_name, df_list = import_csv_module(
             data_type

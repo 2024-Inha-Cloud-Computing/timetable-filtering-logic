@@ -5,14 +5,14 @@ import unicodedata
 import pandas as pd
 
 
-# csv 파일을 읽어와서 인덱스와 DataFrame list로 반환하는 함수
+# csv 파일로부터 변환에 필요한 list & dict와 DataFrame list로 반환하는 함수
 # input: csv 파일(raw data)의 경로
-# output: 학과별 id <-> 학과명 dict, DataFrame list
+# output: 학과별 [id <-> 학과명] list & dict, DataFrame list
 def import_routine(csv_path):
-    # csv 파일의 파일명을 읽어옴
+    # csv 파일명 추출
     csv_files = os.listdir(csv_path)
 
-    # 파일명을 NFC로 normalize
+    # 파일명을 같은 유니코드 인코딩(자소통합)으로 normalize
     csv_files = [unicodedata.normalize("NFC", x) for x in csv_files]
 
     # "학과"로 시작하는 파일명을 "기타"로 시작하는 파일명보다 앞서게 정렬
@@ -21,9 +21,9 @@ def import_routine(csv_path):
     return *get_department_dict(csv_files), import_csv(csv_path, csv_files)
 
 
-# 현재 저장된 csv 파일명에 따라 [학부과-전공명 <-> id] 간의 변환이 가능한 dict, list를 만드는 함수
+# csv 파일명에 따라 [id <-> 학과명] 간의 변환에 필요한 dict, list를 만드는 함수
 # input: csv 파일명 list
-# output: 학부과-전공명 -> id dict, id -> 학부과-전공명 list
+# output: [id <-> 학과명] 간의 변환에 필요한 dict, list
 def get_department_dict(csv_files):
     department_name_to_id = {}
     department_id_to_name = []
@@ -47,7 +47,7 @@ def get_department_dict(csv_files):
     return department_name_to_id, department_id_to_name
 
 
-# 읽어온 csv 파일(raw data)을 DataFrame의 list로 반환하는 함수
+# 읽어온 csv 파일(raw data)을 DataFrame의 list로 변환하는 함수
 # input: csv 파일(raw data)의 경로, csv 파일명 list
 # output: DataFrame list
 def import_csv(csv_path, csv_files):
@@ -62,7 +62,7 @@ def import_csv(csv_path, csv_files):
 
 # csv 파일 이름 정렬 key 함수
 # input: csv 파일명
-# output: 정렬 기준
+# output: 정렬 기준에 따른 우선순위 튜플
 def sort_csv_file(file):
     file_remove_extension = file.split(".")[0]
     file_split = file_remove_extension.split("_")

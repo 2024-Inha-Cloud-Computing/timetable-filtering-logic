@@ -1,11 +1,11 @@
-# 모든 & 교양선택 강의 csv 파일 생성 모듈
+# 전체 & 교양선택 강의 csv 파일 생성 모듈
 
 import pandas as pd
 
 
-# 학과 별 강의 데이터를 모두 합쳐서 하나의 DataFrame으로 만드는 함수
-# input: 학과별 강의가 담긴 DataFrame list
-# output: 모든 학과의 강의가 담긴 DataFrame
+# 학과별 강의 전체를 하나의 DataFrame으로 만드는 함수
+# input: 학과별 강의 DataFrame list
+# output: 전체 강의 DataFrame
 def get_entire_course_df(df_list_by_department):
     entire_course_df = pd.DataFrame()
 
@@ -26,9 +26,9 @@ def get_entire_course_df(df_list_by_department):
     return entire_course_df
 
 
-# 전체 강의 DataFrame을 받아서 교양선택 강의만 추출하는 함수
-# input: entire_course_df
-# output: 교양선택 강의만 추출한 DataFrame
+# 전체 강의 DataFrame 중 교양선택 강의를 추출하는 함수
+# input: 전체 강의 DataFrame
+# output: 교양선택 강의 DataFrame
 def get_elective_course_df(entire_course_df):
     # course_classification이 교양선택, 일반선택인 행만 추출
     elective_course_df = entire_course_df[
