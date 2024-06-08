@@ -95,5 +95,8 @@ def convert_element_to_original_type(df):
             df[column] = df[column].apply(
                 lambda x: np.fromstring(x[1:-1], dtype=np.uint32, sep=" ")
             )
+        elif column in ["classroom"]:
+            # dict 형태로 저장된 string을 dict로 변환
+            df[column] = df[column].apply(lambda x: eval(x))
 
     return df
