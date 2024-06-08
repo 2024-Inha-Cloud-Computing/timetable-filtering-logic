@@ -23,6 +23,8 @@ class TimetableInterface:
             self.__df_curriculum_list,
             # 전체 강의 DataFrame
             self.__entire_course_df,
+            # 교양선택 DataFrame
+            self.__elective_course_df,
             # 전체 강의 DataFrame (시간 bit ndarray)
             self.__entire_course_bit_df,
             # 교양선택 DataFrame
@@ -36,16 +38,22 @@ class TimetableInterface:
     def __import_processed_data(self):
         return import_processed_data()
 
-    def search_course_routine(self, search_word):
+    def __make_timetable(self):
+        pass
+
+    def __convert_timetable_to_front(self, timetable_df):
+        return convert_timetable_to_front(timetable_df)
+
+    def search_course_routine(self, search_word=""):
         # search_course 모듈의 search_course 함수 호출
-        return search_course(search_word, self.__entire_course_df)
+        return search_course(search_word, self.__entire_course_bit_df)
 
 
 # 테스트 코드
 user_data = {
     "학과": "컴퓨터공학과-컴퓨터공학",
 }
-filtering_user_0 = TimetableInterface(user_data)
-search_word = "컴퓨터"
+user_0 = TimetableInterface(user_data)
+search_word = "김지응"
 
-print(filtering_user_0.search_course_routine(search_word))
+print(user_0.search_course_routine(search_word))
