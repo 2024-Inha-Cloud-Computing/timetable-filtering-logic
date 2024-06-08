@@ -25,4 +25,13 @@ def reduce_pool_by_course(
         )
     )
 
-    return user_pool_set
+
+def set_pool_by_attribute(
+    department_possible_df_list, department_id, course_classification
+):
+    course_classification_id = 0 if course_classification == "전공" else 1
+    return set(
+        department_possible_df_list[department_id][course_classification_id][
+            "course_class_id"
+        ].tolist()
+    )

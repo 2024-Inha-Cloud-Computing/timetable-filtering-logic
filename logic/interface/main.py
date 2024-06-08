@@ -54,12 +54,20 @@ class TimetableInterface:
             return convert_course_to_front(back_object)
 
     def reduce_pool(self, course_df):
-        return reduce_pool_by_course(
+        reduce_pool_by_course(
             self.__entire_course_bit_df,
             self.__course_by_all_time,
             self.__user_pool_set,
             course_df,
         )
+
+        self.__user_pool_set = set_pool_by_attribute(
+            self.__department_possible_df_list,
+            self.__department_name_to_id_by_curriculum["컴퓨터공학과-컴퓨터공학"],
+            "전공",
+        )
+
+        return self.__user_pool_set
 
     def search_course_routine(self, search_word=""):
         # search_course 모듈의 search_course 함수 호출
@@ -71,7 +79,7 @@ user_data = {
     "학과": "컴퓨터공학과-컴퓨터공학",
 }
 user = TimetableInterface(user_data)
-search_word = "박성화"
+search_word = "C"
 
 print(user.search_course_routine(search_word))
 print(user.reduce_pool(user.search_course_routine(search_word)))
