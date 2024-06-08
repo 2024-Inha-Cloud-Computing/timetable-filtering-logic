@@ -1,5 +1,5 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes
-1591,GED5001-001,GED5001,1,환경과 인간,전체,3.0,교양선택,[0 0 0 0 0 0 8],조강현,상대평가,※기말 : 6월 22일 13:00 ~ 13:55
-1609,GEE1001-001,GEE1001,1,명언으로 배우는 한자와 한문,전체,3.0,교양선택,[0 0 0 0 0 0 8],박혜숙,상대평가,※기말 : 6월 22일 13:00 ~ 13:55
-1635,GEE2016-001,GEE2016,1,기초물리학,1,3.0,교양선택,[0 0 0 0 0 0 8],윤진희,Pass/Fail,※기말 : 6월 22일 13:00 ~ 13:55
-1752,GEE6020-001,GEE6020,1,암세포 이야기,전체,3.0,교양선택,[0 0 0 0 0 0 8],소재원,상대평가,※기말 : 6월 22일 13:00 ~ 13:55
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
+1591,GED5001-001,GED5001,1,환경과 인간,전체,3.0,교양선택,[0 0 0 0 0 0 8],조강현,상대평가,※기말 : 6월 22일 13:00 ~ 13:55,기타-E-Learning
+1609,GEE1001-001,GEE1001,1,명언으로 배우는 한자와 한문,전체,3.0,교양선택,[0 0 0 0 0 0 8],박혜숙,상대평가,※기말 : 6월 22일 13:00 ~ 13:55,기타-E-Learning
+1635,GEE2016-001,GEE2016,1,기초물리학,1,3.0,교양선택,[0 0 0 0 0 0 8],윤진희,Pass/Fail,※기말 : 6월 22일 13:00 ~ 13:55,기타-일반교양
+1752,GEE6020-001,GEE6020,1,암세포 이야기,전체,3.0,교양선택,[0 0 0 0 0 0 8],소재원,상대평가,※기말 : 6월 22일 13:00 ~ 13:55,기타-E-Learning
