@@ -3,6 +3,7 @@
 from constant_variable import *
 from module.import_processed_data import *
 from module.search_course import *
+from module.is_valid_timetable import *
 
 import pandas as pd
 
