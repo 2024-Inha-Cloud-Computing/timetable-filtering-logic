@@ -1,15 +1,13 @@
 # 앱의 진행에 따라 필요한 필터링을 수행하는 모듈
 
 from constant_variable import *
+from module.import_processed_data import *
 from module.search_course import *
 
 import pandas as pd
 
 
 class TimetableInterface:
-    # class 메소드 불러오기
-    from import_processed_data import import_processed_data as __import_processed_data
-
     def __init__(self, user_data):
         # json 데이터를 받아서 __user_data에 Series 형태로 저장
         self.__user_data = pd.Series(user_data)
@@ -34,6 +32,9 @@ class TimetableInterface:
             # 학과별 전공, 교양필수 DataFrame
             self.__department_possible_df_list,
         ) = self.__import_processed_data()
+
+    def __import_processed_data(self):
+        return import_processed_data()
 
     def search_course_routine(self, search_word):
         # search_course 모듈의 search_course 함수 호출
