@@ -5,7 +5,7 @@ import pandas as pd
 from constant_variable import *
 from module.import_csv import *
 from module.entire_course import *
-from module.time_str_to_bit import *
+from module.convert_time_classroom import *
 from module.course_by_time import *
 from module.course_by_department import *
 
@@ -57,6 +57,24 @@ def import_csv_module(data_type):
     return department_name_to_id, department_id_to_name, df_list
 
 
+# [add_rating 모듈] 강의 평점을 추가한 csv 파일 생성
+# input: 학과별 강의 DataFrame list
+# output: 강의 평점이 추가된 DataFrame list
+def add_rating_module(df_course_list):
+    df_review = pd.read_csv(f"{RAW_PATH}/review.csv")
+
+    df_review.drop(columns=["review"], inplace=True)
+
+    return list(
+        map(
+            lambda df_course: pd.merge(
+                df_course, df_review, on=["course_name", "professor"], how="left"
+            ),
+            df_course_list,
+        )
+    )
+
+
 # [entire_course 모듈] 전체 & 교양선택 강의 csv 파일 생성
 # input: 학과별 강의 DataFrame list
 # output: 전체 & 교양선택 강의 DataFrame
@@ -80,9 +98,9 @@ def entire_course_module(df_course_list, department_id_to_name_for_course):
 # [time_str_to_bit 모듈] DataFrame 내부의 string 형태의 시간을 bit ndarray로 변환한 csv 파일 생성
 # input: 전체 & 교양선택 강의 DataFrame
 # output: 시간이 bit ndarray로 변환된 DataFrame
-def time_str_to_bit_module(entire_course_df, elective_course_df, column_name):
-    entire_course_bit_df = time_str_to_bit_df(entire_course_df, column_name)
-    elective_course_bit_df = time_str_to_bit_df(elective_course_df, column_name)
+def convert_time_classroom(entire_course_df, elective_course_df, column_name):
+    entire_course_bit_df = convert_time_classroom_df(entire_course_df, column_name)
+    elective_course_bit_df = convert_time_classroom_df(elective_course_df, column_name)
 
     entire_course_bit_df.to_csv(
         f"{PROCESSED_TIME_STR_TO_BIT_PATH}/entire_course_bit.csv"
@@ -195,10 +213,12 @@ if __name__ == "__main__":
             department_id_to_name_for_curriculum = department_id_to_name
 
     # 모듈 실행
+    df_course_list = add_rating_module(df_course_list)
+
     entire_course_df, elective_course_df = entire_course_module(
         df_course_list, department_id_to_name_for_course
     )
-    entire_course_bit_df, elective_course_bit_df = time_str_to_bit_module(
+    entire_course_bit_df, elective_course_bit_df = convert_time_classroom(
         entire_course_df, elective_course_df, "time_classroom"
     )
     course_by_time_module(entire_course_bit_df)

@@ -1,3 +1,3 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,rating,department,classroom
 2884,UMD4047-001,UMD4047,1,신경외과학실습,4,2.0,전공선택,"[         0          0 4286578688          0          0          0
-          0]","김은영,박현선,현동근,윤승환,심유식,류달성,배진우,김경민",절대평가, ,의학과-의학
+          0]","김은영,박현선,현동근,윤승환,심유식,류달성,배진우,김경민",절대평가, ,,의학과-의학,{'수': '병원신경외'}

@@ -1,3 +1,3 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
-1699,GEE4007-001,GEE4007,1,발명과 특허,전체,2.0,교양선택,[    0     0     0     0     0     0 16384],김성호,Pass/Fail,"E-learning, ※기말 : 6월 23일 17:00 ~ 17:55,창의영역",기타-E-Learning
-1751,GEE6019-001,GEE6019,1,스포츠과학과 건강,전체,3.0,교양선택,[    0     0     0     0     0     0 16384],"박동호,곽효범",상대평가,※기말 : 6월 23일 17:00 ~ 17:55,기타-일반교양
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,rating,department,classroom
+1699,GEE4007-001,GEE4007,1,발명과 특허,전체,2.0,교양선택,[    0     0     0     0     0     0 16384],김성호,Pass/Fail,"E-learning, ※기말 : 6월 23일 17:00 ~ 17:55,창의영역",3.31,기타-E-Learning,{'셀': '웹강의'}
+1751,GEE6019-001,GEE6019,1,스포츠과학과 건강,전체,3.0,교양선택,[    0     0     0     0     0     0 16384],"박동호,곽효범",상대평가,※기말 : 6월 23일 17:00 ~ 17:55,5.0,기타-일반교양,{'셀': '웹강의'}
