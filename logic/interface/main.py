@@ -5,6 +5,7 @@ from module.import_processed_data import *
 from module.search_course import *
 from module.is_valid_timetable import *
 from module.convert import *
+from module.reduce_pool import *
 
 import pandas as pd
 
@@ -14,7 +15,6 @@ class TimetableInterface:
         # json 데이터를 받아서 __user_data에 Series 형태로 저장
         self.__user_data = pd.Series(user_data)
         self.__user_timetable_df_list = []
-        self.__user_course_df = pd.DataFrame()
 
         # 강의 데이터 불러오기
         (
@@ -39,6 +39,8 @@ class TimetableInterface:
             self.__department_possible_df_list,
         ) = self.__import_processed_data()
 
+        self.__user_pool_set = set(self.__entire_course_df["course_class_id"].tolist())
+
     def __import_processed_data(self):
         return import_processed_data()
 
@@ -51,6 +53,14 @@ class TimetableInterface:
         elif mode == "course":
             return convert_course_to_front(back_object)
 
+    def reduce_pool(self, course_df):
+        return reduce_pool_by_course(
+            self.__entire_course_bit_df,
+            self.__course_by_all_time,
+            self.__user_pool_set,
+            course_df,
+        )
+
     def search_course_routine(self, search_word=""):
         # search_course 모듈의 search_course 함수 호출
         return search_course(search_word, self.__entire_course_bit_df)
@@ -60,7 +70,8 @@ class TimetableInterface:
 user_data = {
     "학과": "컴퓨터공학과-컴퓨터공학",
 }
-user_0 = TimetableInterface(user_data)
-search_word = "김지응"
+user = TimetableInterface(user_data)
+search_word = "박성화"
 
-print(user_0.search_course_routine(search_word))
+print(user.search_course_routine(search_word))
+print(user.reduce_pool(user.search_course_routine(search_word)))
