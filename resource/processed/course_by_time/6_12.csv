@@ -1,3 +1,3 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
-1547,GED1009-001,GED1009,1,마음을 움직이는 리더십,전체,3.0,교양선택,[   0    0    0    0    0    0 4096],김성건,상대평가,※기말 : 6월 23일 15:00 ~ 15:55,기타-E-Learning
-1720,GEE6001-001,GEE6001,1,건강한 체중조절을 위한 맞춤영양,전체,3.0,교양선택,[   0    0    0    0    0    0 4096],장경자,상대평가,※기말 : 6월 23일 15:00 ~ 15:55,기타-E-Learning
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department,classroom
+1547,GED1009-001,GED1009,1,마음을 움직이는 리더십,전체,3.0,교양선택,[   0    0    0    0    0    0 4096],김성건,상대평가,※기말 : 6월 23일 15:00 ~ 15:55,기타-E-Learning,{'셀': '웹강의'}
+1720,GEE6001-001,GEE6001,1,건강한 체중조절을 위한 맞춤영양,전체,3.0,교양선택,[   0    0    0    0    0    0 4096],장경자,상대평가,※기말 : 6월 23일 15:00 ~ 15:55,기타-E-Learning,{'셀': '웹강의'}

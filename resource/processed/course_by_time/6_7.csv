@@ -1,3 +1,3 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
-1600,GED6001-001,GED6001,1,프로그래밍과 문제해결,전체,3.0,교양선택,[  0   0   0   0   0   0 128],이경자,절대평가,※기말 : 6월 22일 17:00 ~ 17:55,기타-핵심교양
-1612,GEE1006-001,GEE1006,1,동화의이해,전체,3.0,교양선택,[  0   0   0   0   0   0 128],이문기,상대평가,※기말 : 6월 22일 17:00 ~ 17:55,기타-일반교양
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department,classroom
+1600,GED6001-001,GED6001,1,프로그래밍과 문제해결,전체,3.0,교양선택,[  0   0   0   0   0   0 128],이경자,절대평가,※기말 : 6월 22일 17:00 ~ 17:55,기타-핵심교양,{'셀': '웹강의'}
+1612,GEE1006-001,GEE1006,1,동화의이해,전체,3.0,교양선택,[  0   0   0   0   0   0 128],이문기,상대평가,※기말 : 6월 22일 17:00 ~ 17:55,기타-일반교양,{'셀': '웹강의'}

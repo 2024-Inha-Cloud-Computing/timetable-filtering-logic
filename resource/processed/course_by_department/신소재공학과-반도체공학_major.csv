@@ -1,4 +1,4 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
-2677,SEE3000-001,SEE3000,1,반도체 공정장비실습,전체,3.0,전공선택,[      0       0       0       0 4128768       0       0],전승준,Pass/Fail, ,신소재공학과-반도체공학
-2678,SEE3101-001,SEE3101,1,반도체개론,전체,3.0,전공필수,[    0 64512     0 64512     0     0     0],최리노,상대평가, ,신소재공학과-반도체공학
-2679,SEE3102-001,SEE3102,1,전기자기학,전체,3.0,전공필수,[516096      0      0      0      0      0      0],김경헌,상대평가, ,신소재공학과-반도체공학
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department,classroom
+2677,SEE3000-001,SEE3000,1,반도체 공정장비실습,전체,3.0,전공선택,[      0       0       0       0 4128768       0       0],전승준,Pass/Fail, ,신소재공학과-반도체공학,{'금': '5서252'}
+2678,SEE3101-001,SEE3101,1,반도체개론,전체,3.0,전공필수,[    0 64512     0 64512     0     0     0],최리노,상대평가, ,신소재공학과-반도체공학,"{'화': '5서255', '목': '5서255'}"
+2679,SEE3102-001,SEE3102,1,전기자기학,전체,3.0,전공필수,[516096      0      0      0      0      0      0],김경헌,상대평가, ,신소재공학과-반도체공학,{'월': '5서252'}

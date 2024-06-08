@@ -6,7 +6,7 @@ import numpy as np
 # string 형태의 시간을 bit ndarray로 변환하는 함수
 # input: string 형태의 시간
 # output: bit ndarray 형태의 시간
-def time_str_to_bit(time_str):
+def convert_time(time_str):
     # 요일을 int로 변환하기 위한 dict
     day_to_int = {"월": 0, "화": 1, "수": 2, "목": 3, "금": 4, "토": 5, "셀": 6}
 
@@ -55,11 +55,39 @@ def time_str_to_bit(time_str):
     return time_bit_ndarray
 
 
+# DataFrame 내부의 string 형태의 시간 column으로 강의실 dict를 만드는 함수
+# input: string 형태의 시간
+# output: 강의실 dict
+def convert_classroom_dict(time_str):
+    time_dict = {}
+
+    # "/"로 split
+    split_by_slash = time_str.split("/")
+
+    for split_by_slash_element in split_by_slash:
+        cur_day = []
+
+        for split_by_slash_element_char in split_by_slash_element:
+            if split_by_slash_element_char == "(":
+                for cur_day_i in cur_day:
+                    time_dict[cur_day_i] = split_by_slash_element.split("(")[1].split(
+                        ")"
+                    )[0]
+            elif (
+                not split_by_slash_element_char.isdigit()
+                and split_by_slash_element_char != ","
+            ):
+                cur_day.append(split_by_slash_element_char)
+
+    return time_dict
+
+
 # DataFrame 내부의 string 형태의 시간 column 전체를 bit로 변환하는 함수
 # input: 변환 전 DataFrame, column 이름
 # output: 변환 후 DataFrame
-def time_str_to_bit_df(df, column_name):
+def convert_time_classroom_df(df, time_classroom):
     df_copy = df.copy()
-    df_copy[column_name] = df_copy[column_name].apply(time_str_to_bit)
+    df_copy["classroom"] = df_copy[time_classroom].apply(convert_classroom_dict)
+    df_copy[time_classroom] = df_copy[time_classroom].apply(convert_time)
 
     return df_copy

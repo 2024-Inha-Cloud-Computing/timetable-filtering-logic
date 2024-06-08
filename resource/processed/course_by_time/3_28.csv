@@ -1,5 +1,5 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
-265,BPE3106-001,BPE3106,1,단백질공학설계,3,5.0,전공선택,[        0         0         0 536346624         0         0         0],양윤정,Pass/Fail, ,바이오제약공학과-바이오제약공학
-270,BPE4106-001,BPE4106,1,생물공정제어 최적화,4,5.0,전공선택,[        0         0         0 536346624         0         0         0],신화성,Pass/Fail, ,바이오제약공학과-바이오제약공학
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department,classroom
+265,BPE3106-001,BPE3106,1,단백질공학설계,3,5.0,전공선택,[        0         0         0 536346624         0         0         0],양윤정,Pass/Fail, ,바이오제약공학과-바이오제약공학,{'목': '항공-216'}
+270,BPE4106-001,BPE4106,1,생물공정제어 최적화,4,5.0,전공선택,[        0         0         0 536346624         0         0         0],신화성,Pass/Fail, ,바이오제약공학과-바이오제약공학,{'목': '항공-217'}
 2887,UMD4050-001,UMD4050,1,정형외과학실습,4,2.0,전공선택,"[         0          0          0 4286578688          0          0
-          0]","조규정,이동주,김범수,권대규,전윤상,류동진,유준일",절대평가, ,의학과-의학
+          0]","조규정,이동주,김범수,권대규,전윤상,류동진,유준일",절대평가, ,의학과-의학,{'목': '병원정형외'}

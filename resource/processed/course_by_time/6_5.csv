@@ -1,4 +1,4 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
-1585,GED4006-001,GED4006,1,국제관계학개론,전체,3.0,교양선택,[ 0  0  0  0  0  0 32],주승호,절대평가,"영어, English, ※기말 : 6월 22일 15:00 ~ 15:55",기타-원어강의
-1605,GED6007-001,GED6007,1,디지털 트랜스포메이션과 미래사회의 이해,전체,3.0,교양선택,[ 0  0  0  0  0  0 32],이재우,상대평가,※기말 : 6월 22일 15:00 ~ 15:55,기타-E-Learning
-1714,GEE4026-001,GEE4026,1,성공하는 비즈니스 모델 개발,전체,3.0,교양선택,[ 0  0  0  0  0  0 32],박승욱,Pass/Fail,"※기말 : 6월 22일 15:00 ~ 15:55,창의영역",기타-일반교양
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department,classroom
+1585,GED4006-001,GED4006,1,국제관계학개론,전체,3.0,교양선택,[ 0  0  0  0  0  0 32],주승호,절대평가,"영어, English, ※기말 : 6월 22일 15:00 ~ 15:55",기타-원어강의,{'셀': '웹강의'}
+1605,GED6007-001,GED6007,1,디지털 트랜스포메이션과 미래사회의 이해,전체,3.0,교양선택,[ 0  0  0  0  0  0 32],이재우,상대평가,※기말 : 6월 22일 15:00 ~ 15:55,기타-E-Learning,{'셀': '웹강의'}
+1714,GEE4026-001,GEE4026,1,성공하는 비즈니스 모델 개발,전체,3.0,교양선택,[ 0  0  0  0  0  0 32],박승욱,Pass/Fail,"※기말 : 6월 22일 15:00 ~ 15:55,창의영역",기타-일반교양,{'셀': '웹강의'}
