@@ -6,8 +6,12 @@ import pandas as pd
 # 학과별 강의 전체를 하나의 DataFrame으로 만드는 함수
 # input: 학과별 강의 DataFrame list
 # output: 전체 강의 DataFrame
-def get_entire_course_df(df_list_by_department):
+def get_entire_course_df(df_list_by_department, department_id_to_name_for_course):
     entire_course_df = pd.DataFrame()
+
+    for department_id, department_name in enumerate(department_id_to_name_for_course):
+        # 각 DataFrame에 학과 정보를 추가
+        df_list_by_department[department_id]["department"] = department_name
 
     # 모든 DataFrame을 하나로 병합
     for df in df_list_by_department:

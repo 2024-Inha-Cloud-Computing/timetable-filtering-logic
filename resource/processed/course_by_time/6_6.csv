@@ -1,3 +1,3 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes
-1594,GED5003-001,GED5003,1,생활과과학,전체,3.0,교양선택,[ 0  0  0  0  0  0 64],이재우,상대평가,※기말 : 6월 22일 16:00 ~ 16:55
-1644,GEE2028-001,GEE2028,1,브랜드 생성의 원리,전체,3.0,교양선택,[ 0  0  0  0  0  0 64],이재진,상대평가,※기말 : 6월 22일 16:00 ~ 16:55
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department
+1594,GED5003-001,GED5003,1,생활과과학,전체,3.0,교양선택,[ 0  0  0  0  0  0 64],이재우,상대평가,※기말 : 6월 22일 16:00 ~ 16:55,기타-E-Learning
+1644,GEE2028-001,GEE2028,1,브랜드 생성의 원리,전체,3.0,교양선택,[ 0  0  0  0  0  0 64],이재진,상대평가,※기말 : 6월 22일 16:00 ~ 16:55,기타-일반교양

@@ -60,8 +60,10 @@ def import_csv_module(data_type):
 # [entire_course 모듈] 전체 & 교양선택 강의 csv 파일 생성
 # input: 학과별 강의 DataFrame list
 # output: 전체 & 교양선택 강의 DataFrame
-def entire_course_module(df_course_list):
-    entire_course_df = get_entire_course_df(df_course_list)
+def entire_course_module(df_course_list, department_id_to_name_for_course):
+    entire_course_df = get_entire_course_df(
+        df_course_list, department_id_to_name_for_course
+    )
     elective_course_df = get_elective_course_df(entire_course_df)
 
     entire_course_df.to_csv(f"{PROCESSED_ENTIRE_COURSE_PATH}/entire_course.csv")
@@ -193,7 +195,9 @@ if __name__ == "__main__":
             department_id_to_name_for_curriculum = department_id_to_name
 
     # 모듈 실행
-    entire_course_df, elective_course_df = entire_course_module(df_course_list)
+    entire_course_df, elective_course_df = entire_course_module(
+        df_course_list, department_id_to_name_for_course
+    )
     entire_course_bit_df, elective_course_bit_df = time_str_to_bit_module(
         entire_course_df, elective_course_df, "time_classroom"
     )
