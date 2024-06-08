@@ -2,22 +2,12 @@
 
 import pandas as pd
 
-from import_csv import *
-from entire_course import *
-from time_str_to_bit import *
-from course_by_time import *
-from course_by_department import *
-
-# 파일 저장 경로
-RESOURCE_PATH = "resource"
-RAW_PATH = f"{RESOURCE_PATH}/raw"
-PROCESSED_PATH = f"{RESOURCE_PATH}/processed"
-PROCESSED_DEPARTMENT_INDEX_PATH = f"{PROCESSED_PATH}/department_index"
-PROCESSED_IMPORT_PATH = f"{PROCESSED_PATH}/import_csv"
-PROCESSED_ENTIRE_COURSE_PATH = f"{PROCESSED_PATH}/entire_course"
-PROCESSED_TIME_STR_TO_BIT_PATH = f"{PROCESSED_PATH}/time_str_to_bit"
-PROCESSED_COURSE_BY_TIME_PATH = f"{PROCESSED_PATH}/course_by_time"
-PROCESSED_COURSE_BY_DEPARTMENT_PATH = f"{PROCESSED_PATH}/course_by_department"
+from constant_variable import *
+from module.import_csv import *
+from module.entire_course import *
+from module.time_str_to_bit import *
+from module.course_by_time import *
+from module.course_by_department import *
 
 
 # [import_csv 모듈] 학과 강의 및 커리큘럼 csv 파일 생성
@@ -187,14 +177,6 @@ def course_by_department_module(
 
 # main 함수
 if __name__ == "__main__":
-    # 변수 초기화
-    df_course_list = None
-    df_curriculum_list = None
-    department_name_to_id_for_course = None
-    department_name_to_id_for_curriculum = None
-    department_id_to_name_for_course = None
-    department_id_to_name_for_curriculum = None
-
     # csv 파일을 불러와 사용할 변수로 저장
     for data_type in ["course", "curriculum"]:
         department_name_to_id, department_id_to_name, df_list = import_csv_module(

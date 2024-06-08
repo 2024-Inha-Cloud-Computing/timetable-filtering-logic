@@ -1,5 +1,7 @@
 # 특정 시간 강의의 DataFrame을 반환하는 모듈
 
+from constant_variable import *
+
 import pandas as pd
 import numpy as np
 
@@ -21,8 +23,6 @@ def get_course_by_time(df, time):
 # input: 강의 DataFrame
 # output: 개별 교시에 열리는 강의 DataFrame list
 def get_course_by_all_time(df):
-    DAY_CNT = 7
-    TIME_CNT = 31
     # 개별 교시에 열리는 강의를 저장할 list
     course_by_all_time = [[] for _ in range(DAY_CNT)]
 
