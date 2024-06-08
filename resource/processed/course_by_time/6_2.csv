@@ -1,4 +1,4 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department,classroom
-1560,GED2009-001,GED2009,1,문화심리,전체,3.0,교양선택,[0 0 0 0 0 0 4],김의철,절대평가,"영어, English, ※기말 : 6월 22일 11:00 ~ 11:55",기타-E-Learning,{'셀': '웹강의'}
-1592,GED5002-001,GED5002,1,생활 속 바이오이야기,전체,3.0,교양선택,[0 0 0 0 0 0 4],김은기,상대평가,※기말 : 6월 22일 11:00 ~ 11:55,기타-E-Learning,{'셀': '웹강의'}
-1750,GEE6016-001,GEE6016,1,금연과 건강한 삶,전체,3.0,교양선택,[0 0 0 0 0 0 4],"이훈재,손민,서민희",상대평가,※기말 : 6월 22일 11:00 ~ 11:55,기타-E-Learning,{'셀': '웹강의'}
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,rating,department,classroom
+1560,GED2009-001,GED2009,1,문화심리,전체,3.0,교양선택,[0 0 0 0 0 0 4],김의철,절대평가,"영어, English, ※기말 : 6월 22일 11:00 ~ 11:55",1.85,기타-E-Learning,{'셀': '웹강의'}
+1592,GED5002-001,GED5002,1,생활 속 바이오이야기,전체,3.0,교양선택,[0 0 0 0 0 0 4],김은기,상대평가,※기말 : 6월 22일 11:00 ~ 11:55,4.21,기타-E-Learning,{'셀': '웹강의'}
+1750,GEE6016-001,GEE6016,1,금연과 건강한 삶,전체,3.0,교양선택,[0 0 0 0 0 0 4],"이훈재,손민,서민희",상대평가,※기말 : 6월 22일 11:00 ~ 11:55,4.14,기타-E-Learning,{'셀': '웹강의'}

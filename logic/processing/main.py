@@ -57,6 +57,24 @@ def import_csv_module(data_type):
     return department_name_to_id, department_id_to_name, df_list
 
 
+# [add_rating 모듈] 강의 평점을 추가한 csv 파일 생성
+# input: 학과별 강의 DataFrame list
+# output: 강의 평점이 추가된 DataFrame list
+def add_rating_module(df_course_list):
+    df_review = pd.read_csv(f"{RAW_PATH}/review.csv")
+
+    df_review.drop(columns=["review"], inplace=True)
+
+    return list(
+        map(
+            lambda df_course: pd.merge(
+                df_course, df_review, on=["course_name", "professor"], how="left"
+            ),
+            df_course_list,
+        )
+    )
+
+
 # [entire_course 모듈] 전체 & 교양선택 강의 csv 파일 생성
 # input: 학과별 강의 DataFrame list
 # output: 전체 & 교양선택 강의 DataFrame
@@ -195,6 +213,8 @@ if __name__ == "__main__":
             department_id_to_name_for_curriculum = department_id_to_name
 
     # 모듈 실행
+    df_course_list = add_rating_module(df_course_list)
+
     entire_course_df, elective_course_df = entire_course_module(
         df_course_list, department_id_to_name_for_course
     )

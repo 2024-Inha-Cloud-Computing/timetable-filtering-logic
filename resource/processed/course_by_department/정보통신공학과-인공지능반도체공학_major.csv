@@ -1,3 +1,3 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department,classroom
-100,AIS4001-001,AIS4001,1,인공지능시스템반도체,4,3.0,전공선택,[458752      0 458752      0      0      0      0],"이한호,서영교",상대평가,정보통신공학과(시스템반도체설계) 수업과 합반,정보통신공학과-인공지능반도체공학,"{'월': '하-002', '수': '하-002'}"
-101,AIS4010-001,AIS4010,1,인공지능반도체 설계프로젝트,4,3.0,전공필수,[      0       0 7864368       0       0 7864368       0],"이한호,송병철,전재훈",Pass/Fail, ,정보통신공학과-인공지능반도체공학,"{'수': '하-426', '토': '하-426'}"
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,rating,department,classroom
+100,AIS4001-001,AIS4001,1,인공지능시스템반도체,4,3.0,전공선택,[458752      0 458752      0      0      0      0],"이한호,서영교",상대평가,정보통신공학과(시스템반도체설계) 수업과 합반,,정보통신공학과-인공지능반도체공학,"{'월': '하-002', '수': '하-002'}"
+101,AIS4010-001,AIS4010,1,인공지능반도체 설계프로젝트,4,3.0,전공필수,[      0       0 7864368       0       0 7864368       0],"이한호,송병철,전재훈",Pass/Fail, ,,정보통신공학과-인공지능반도체공학,"{'수': '하-426', '토': '하-426'}"

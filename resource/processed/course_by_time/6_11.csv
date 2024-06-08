@@ -1,3 +1,3 @@
-,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,department,classroom
-1588,GED4009-001,GED4009,1,동북아와 한일관계,전체,3.0,교양선택,[   0    0    0    0    0    0 2048],김웅희,상대평가,※기말 : 6월 23일 14:00 ~ 14:55,기타-핵심교양,{'셀': '웹강의'}
-1595,GED5004-001,GED5004,1,지속가능성을 위한 화학 이야기,전체,3.0,교양선택,[   0    0    0    0    0    0 2048],이익모,상대평가,※기말 : 6월 23일 14:00 ~ 14:55,기타-핵심교양,{'셀': '웹강의'}
+,course_class_id,course_id,class_id,course_name,grade,credits,course_classification,time_classroom,professor,assessment_method,notes,rating,department,classroom
+1588,GED4009-001,GED4009,1,동북아와 한일관계,전체,3.0,교양선택,[   0    0    0    0    0    0 2048],김웅희,상대평가,※기말 : 6월 23일 14:00 ~ 14:55,4.25,기타-핵심교양,{'셀': '웹강의'}
+1595,GED5004-001,GED5004,1,지속가능성을 위한 화학 이야기,전체,3.0,교양선택,[   0    0    0    0    0    0 2048],이익모,상대평가,※기말 : 6월 23일 14:00 ~ 14:55,3.91,기타-핵심교양,{'셀': '웹강의'}
