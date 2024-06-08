@@ -13,6 +13,8 @@ class TimetableInterface:
     def __init__(self, user_data):
         # json 데이터를 받아서 __user_data에 Series 형태로 저장
         self.__user_data = pd.Series(user_data)
+        self.__user_timetable_df_list = []
+        self.__user_course_df = pd.DataFrame()
 
         # 강의 데이터 불러오기
         (

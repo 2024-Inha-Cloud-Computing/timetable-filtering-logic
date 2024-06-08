@@ -51,6 +51,12 @@ def convert_course_to_front(course_df):
     course_list = []
 
     for _, course_series in course_df.iterrows():
-        course_list.appent(f"{course_series["department_name"]}, {course_series["course_name"]}, {course_series["course_id"]}")
+        department_name = course_series["department"]
+        if department_name.startswith("기타"):
+            department_name = department_name.split("-")[1]
+        else:
+            department_name = department_name.split("-")[0]
+
+        course_list.append(f"{department_name}, {course_series["course_name"]}, {course_series["course_id"]}")
 
     return course_list
