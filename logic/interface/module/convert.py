@@ -27,7 +27,7 @@ def convert_timetable_course_to_front(course_series):
                             "time": time_head,
                             "duration": duration,
                             "subject": course_series["course_name"],
-                            "room": None,
+                            "room": course_series["classroom"][day_list[day_index]],
                             "professor": course_series["professor"],
                             "course_class_id": course_series["course_class_id"],
                         }
