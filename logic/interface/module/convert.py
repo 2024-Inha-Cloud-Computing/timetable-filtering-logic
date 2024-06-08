@@ -1,10 +1,10 @@
-# 프론트 백 시간표 데이터 변환 모듈
+# 프론트 백 데이터 변환 모듈
 
 from constant_variable import *
 
 
-# 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
-def convert_course_to_front(course_series):
+# 시간표에서 사용할 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
+def convert_timetable_course_to_front(course_series):
     course_time_classroom = course_series["time_classroom"]
     course_list = []
     day_list = ["월", "화", "수", "목", "금", "토", "셀"]
@@ -37,11 +37,20 @@ def convert_course_to_front(course_series):
 
     return course_list
 
-
+# 시간표 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_timetable_to_front(timetable_df):
     timetable_list = []
 
     for _, course_series in timetable_df.iterrows():
-        timetable_list += convert_course_to_front(course_series)
+        timetable_list += convert_timetable_course_to_front(course_series)
 
     return timetable_list
+
+# 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
+def convert_course_to_front(course_df):
+    course_list = []
+
+    for _, course_series in course_df.iterrows():
+        course_list.appent(f"{course_series["department_name"]}, {course_series["course_name"]}, {course_series["course_id"]}")
+
+    return course_list

@@ -4,7 +4,7 @@ from constant_variable import *
 from module.import_processed_data import *
 from module.search_course import *
 from module.is_valid_timetable import *
-from module.convert_timetable import *
+from module.convert import *
 
 import pandas as pd
 
@@ -43,8 +43,11 @@ class TimetableInterface:
     def __make_timetable(self):
         pass
 
-    def __convert_timetable_to_front(self, timetable_df):
-        return convert_timetable_to_front(timetable_df)
+    def __convert_to_front(self, mode, back_object):
+        if mode == "timetable":
+            return convert_timetable_to_front(back_object)
+        elif mode == "course":
+            return convert_course_to_front(back_object)
 
     def search_course_routine(self, search_word=""):
         # search_course 모듈의 search_course 함수 호출
