@@ -2,6 +2,8 @@
 
 from constant_variable import *
 
+import pandas as pd
+
 
 # 시간표에서 사용할 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_timetable_element_to_front(course_series):
@@ -37,6 +39,9 @@ def convert_timetable_element_to_front(course_series):
 
     return course_list
 
+def convert_timetable_element_to_back(course_series):
+    pass
+
 # 시간표 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_timetable_to_front(timetable_df):
     timetable_list = []
@@ -45,6 +50,9 @@ def convert_timetable_to_front(timetable_df):
         timetable_list += convert_timetable_element_to_front(course_series)
 
     return timetable_list
+
+def convert_timetable_to_back(timetable_df):
+    pass
 
 # 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_course_to_front(course_df):
@@ -64,20 +72,44 @@ def convert_course_to_front(course_df):
 
     return course_list
 
+def convert_course_to_back(entire_course_bit_df, course_list):
+    course_df = pd.DataFrame()
+
+    for department, course_name, course_id in course_list:
+        course_df = course_df.append(
+            entire_course_bit_df[
+                entire_course_bit_df["course_id"] == course_id
+            ]
+        )
+
+    return course_df
+
+
 def convert_professor_to_front(professor_dict):
     pass
 
+def convert_professor_to_back(entire_course_bit_df, professor_dict):
+    professor_course_df = pd.DataFrame()
 
-def convert_timetable_element_to_back(course_series):
+    for course, professor in professor_dict.items():
+        course_id = course.split(", ")[2]
+        # course_id와 professor가 일치하는 row를 찾아서 추가
+        professor_course_df = professor_course_df.append(
+            entire_course_bit_df[
+                (entire_course_bit_df["course_id"] == course_id) and (entire_course_bit_df["professor"] == professor)
+            ]
+        )
+
+    return professor_course_df
+
+
+def convert_avoid_time_to_front(avoid_time_bit):
     pass
 
-def convert_timetable_to_back(timetable_df):
-    pass
-
-def convert_course_to_back(course_df):
-    pass
-
-def convert_professor_to_back(professor_dict):
+def convert_avoid_time_to_back(avoid_time_list):
+    # 예시
+    # "월요일 3시 30분 ~ 5시 30분"
+    # "금요일 5시 ~ 7시"
     pass
 
 
@@ -89,6 +121,8 @@ def convert_with_front(self, mode, object_type, unknown_object):
             return convert_course_to_front(unknown_object)
         elif object_type == PROFESSOR:
             return convert_professor_to_front(unknown_object)
+        elif object_type == AVOID_TIME:
+            return convert_avoid_time_to_front(unknown_object)
     elif mode == TO_BACK:
         if object_type == TIMETABLE:
             return convert_timetable_to_back(unknown_object)
@@ -96,3 +130,5 @@ def convert_with_front(self, mode, object_type, unknown_object):
             return convert_course_to_back(unknown_object)
         elif object_type == PROFESSOR:
             return convert_professor_to_back(unknown_object)
+        elif object_type == AVOID_TIME:
+            return convert_avoid_time_to_back(unknown_object)

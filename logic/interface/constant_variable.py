@@ -26,6 +26,7 @@ TO_BACK = 1
 TIMETABLE = 0
 COURSE = 1
 PROFESSOR = 2
+AVOID_TIME = 3
 
 # auto_fill mode
 MAJOR_MODE = 0
