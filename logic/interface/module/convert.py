@@ -60,6 +60,7 @@ def convert_course_to_front(course_df):
     course_df = course_df.drop_duplicates(subset="course_id", keep="first")
 
     course_list = []
+    print("asdf")
 
     for _, course_series in course_df.iterrows():
         department_name = course_series["department"]
@@ -69,6 +70,7 @@ def convert_course_to_front(course_df):
             department_name = department_name.split("-")[0]
 
         course_list.append(f"{department_name}, {course_series["course_name"]}, {course_series["course_id"]}")
+
 
     return course_list
 
@@ -113,7 +115,7 @@ def convert_avoid_time_to_back(avoid_time_list):
     pass
 
 
-def convert_with_front(self, mode, object_type, unknown_object):
+def convert_with_front(mode, object_type, unknown_object):
     if mode == TO_FRONT:
         if object_type == TIMETABLE:
             return convert_timetable_to_front(unknown_object)
@@ -123,6 +125,8 @@ def convert_with_front(self, mode, object_type, unknown_object):
             return convert_professor_to_front(unknown_object)
         elif object_type == AVOID_TIME:
             return convert_avoid_time_to_front(unknown_object)
+        else:
+            raise ValueError("object_type이 잘못되었습니다.")
     elif mode == TO_BACK:
         if object_type == TIMETABLE:
             return convert_timetable_to_back(unknown_object)
@@ -132,3 +136,7 @@ def convert_with_front(self, mode, object_type, unknown_object):
             return convert_professor_to_back(unknown_object)
         elif object_type == AVOID_TIME:
             return convert_avoid_time_to_back(unknown_object)
+        else:
+            raise ValueError("object_type이 잘못되었습니다.")
+    else:
+        raise ValueError("mode가 잘못되었습니다.")

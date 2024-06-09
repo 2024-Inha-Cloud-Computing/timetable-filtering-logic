@@ -49,7 +49,7 @@ class TimetableInterface:
             search_word, self.__entire_course_bit_df
         )
         search_course_front_object = convert_with_front(
-            TO_FRONT, "course", search_course_back_opject
+            TO_FRONT, COURSE, search_course_back_opject
         )
 
         return search_course_front_object
@@ -57,12 +57,12 @@ class TimetableInterface:
     def find_professor_routine(self, course_list):
         course_list_front_object = course_list
         course_df_back_object = convert_with_front(
-            TO_BACK, "course", course_list_front_object
+            TO_BACK, COURSE, course_list_front_object
         )
 
         find_professor_back_object = find_professor(course_df_back_object)
         find_professor_front_object = convert_with_front(
-            TO_FRONT, "course", find_professor_back_object
+            TO_FRONT, COURSE, find_professor_back_object
         )
 
         return find_professor_front_object
@@ -83,7 +83,7 @@ class TimetableInterface:
 
         timetable_df_list_back_object = auto_fill(timetable_df, pool, fill_grade)
         timetable_df_list_front_object = convert_with_front(
-            TO_FRONT, "timetable", timetable_df_list_back_object
+            TO_FRONT, TIMETABLE, timetable_df_list_back_object
         )
 
         return timetable_df_list_front_object
@@ -94,4 +94,6 @@ user_data = {
     "학과": "컴퓨터공학과-컴퓨터공학",
 }
 user = TimetableInterface(user_data)
-search_word = "김지응"
+search_word = ""
+search_result = user.search_course_routine(search_word)
+print(search_result)
