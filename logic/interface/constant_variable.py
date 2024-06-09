@@ -11,3 +11,23 @@ PROCESSED_COURSE_BY_DEPARTMENT_PATH = f"{PROCESSED_PATH}/course_by_department"
 # 요일, 교시
 DAY_NUM = 7
 TIME_NUM = 31
+
+# user taste
+AM = 0
+PM = 1
+SPACE_ON = 0
+SPACE_OFF = 1
+
+# convert mode
+TO_FRONT = 0
+TO_BACK = 1
+
+# opject type
+TIMETABLE = 0
+COURSE = 1
+PROFESSOR = 2
+
+# auto_fill mode
+MAJOR_MODE = 0
+LIBERAL_REQUIRED_MODE = 1
+ELECTIVE_MODE = 2

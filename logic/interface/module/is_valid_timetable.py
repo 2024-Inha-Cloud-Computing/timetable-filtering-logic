@@ -15,7 +15,7 @@ def is_valid_timetable(timetable_df):
     return True
 
 
-def is_valid_course(course_df, timetable_df):
+def is_valid_course(course_series, timetable_df):
     timetable_or = np.bitwise_or.reduce(timetable_df["time_classroom"])
 
-    return not np.bitwise_and(timetable_or, course_df["time_classroom"]).any()
+    return not np.bitwise_and(timetable_or, course_series["time_classroom"]).any()

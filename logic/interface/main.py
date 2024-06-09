@@ -1,19 +1,24 @@
-# 앱의 진행에 따라 필요한 필터링을 수행하는 모듈
+# 앱의 진행에 따라 필요한 기능을 수행하는 모듈
 
 from constant_variable import *
 from module.import_processed_data import *
 from module.search_course import *
 from module.is_valid_timetable import *
 from module.convert import *
-from module.reduce_pool import *
+from module.find_professor import *
+from module.auto_fill import *
+from module.set_pool import *
 
 import pandas as pd
 
 
 class TimetableInterface:
-    def __init__(self, user_data):
-        # json 데이터를 받아서 __user_data에 Series 형태로 저장
-        self.__user_data = pd.Series(user_data)
+    def __init__(self, user_taste):
+        self.__user_taste = {
+            "am_pm": AM,
+            "time1": 2,
+            "space": SPACE_ON,
+        }
         self.__user_timetable_df_list = []
 
         # 강의 데이터 불러오기
@@ -37,41 +42,51 @@ class TimetableInterface:
             self.__course_by_all_time,
             # 학과별 전공, 교양필수 DataFrame
             self.__department_possible_df_list,
-        ) = self.__import_processed_data()
-
-        self.__user_pool_set = set(self.__entire_course_df["course_class_id"].tolist())
-
-    def __import_processed_data(self):
-        return import_processed_data()
-
-    def __make_timetable(self):
-        pass
-
-    def __convert_to_front(self, mode, back_object):
-        if mode == "timetable":
-            return convert_timetable_to_front(back_object)
-        elif mode == "course":
-            return convert_course_to_front(back_object)
-
-    def reduce_pool(self, course_df):
-        reduce_pool_by_course(
-            self.__entire_course_bit_df,
-            self.__course_by_all_time,
-            self.__user_pool_set,
-            course_df,
-        )
-
-        self.__user_pool_set = set_pool_by_attribute(
-            self.__department_possible_df_list,
-            self.__department_name_to_id_by_curriculum["컴퓨터공학과-컴퓨터공학"],
-            "전공",
-        )
-
-        return self.__user_pool_set
+        ) = import_processed_data()
 
     def search_course_routine(self, search_word=""):
-        # search_course 모듈의 search_course 함수 호출
-        return search_course(search_word, self.__entire_course_bit_df)
+        search_course_back_opject = search_course(
+            search_word, self.__entire_course_bit_df
+        )
+        search_course_front_object = convert_with_front(
+            TO_FRONT, "course", search_course_back_opject
+        )
+
+        return search_course_front_object
+
+    def find_professor_routine(self, course_list):
+        course_list_front_object = course_list
+        course_list_back_object = convert_with_front(
+            TO_BACK, "course", course_list_front_object
+        )
+
+        find_professor_back_object = find_professor(course_list_back_object)
+        find_professor_front_object = convert_with_front(
+            TO_FRONT, "course", find_professor_back_object
+        )
+
+        return find_professor_front_object
+
+    def auto_fill_routine(self, mode, timetable_df, fill_grade, department=None):
+        pool_by_timetable = set_pool_by_timetable(
+            self.__entire_course_bit_df, timetable_df
+        )
+        pool_by_mode = set_pool_by_mode(
+            mode,
+            self.__department_possible_df_list,
+            self.__elective_course_bit_df,
+            department,
+        )
+
+        # 두 pool의 교집합
+        pool = pd.merge(pool_by_timetable, pool_by_mode)
+
+        timetable_df_list_back_object = auto_fill(timetable_df, pool, fill_grade)
+        timetable_df_list_front_object = convert_with_front(
+            TO_FRONT, "timetable", timetable_df_list_back_object
+        )
+
+        return timetable_df_list_front_object
 
 
 # 테스트 코드
@@ -79,7 +94,4 @@ user_data = {
     "학과": "컴퓨터공학과-컴퓨터공학",
 }
 user = TimetableInterface(user_data)
-search_word = "C"
-
-print(user.search_course_routine(search_word))
-print(user.reduce_pool(user.search_course_routine(search_word)))
+search_word = "김지응"

@@ -4,7 +4,7 @@ from constant_variable import *
 
 
 # 시간표에서 사용할 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
-def convert_timetable_course_to_front(course_series):
+def convert_timetable_element_to_front(course_series):
     course_time_classroom = course_series["time_classroom"]
     course_list = []
     day_list = ["월", "화", "수", "목", "금", "토", "셀"]
@@ -42,12 +42,15 @@ def convert_timetable_to_front(timetable_df):
     timetable_list = []
 
     for _, course_series in timetable_df.iterrows():
-        timetable_list += convert_timetable_course_to_front(course_series)
+        timetable_list += convert_timetable_element_to_front(course_series)
 
     return timetable_list
 
 # 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_course_to_front(course_df):
+    # 학수번호가 중복된 row 제거
+    course_df = course_df.drop_duplicates(subset="course_id", keep="first")
+
     course_list = []
 
     for _, course_series in course_df.iterrows():
@@ -60,3 +63,36 @@ def convert_course_to_front(course_df):
         course_list.append(f"{department_name}, {course_series["course_name"]}, {course_series["course_id"]}")
 
     return course_list
+
+def convert_professor_to_front(professor_dict):
+    pass
+
+
+def convert_timetable_element_to_back(course_series):
+    pass
+
+def convert_timetable_to_back(timetable_df):
+    pass
+
+def convert_course_to_back(course_df):
+    pass
+
+def convert_professor_to_back(professor_dict):
+    pass
+
+
+def convert_with_front(self, mode, object_type, unknown_object):
+    if mode == TO_FRONT:
+        if object_type == TIMETABLE:
+            return convert_timetable_to_front(unknown_object)
+        elif object_type == COURSE:
+            return convert_course_to_front(unknown_object)
+        elif object_type == PROFESSOR:
+            return convert_professor_to_front(unknown_object)
+    elif mode == TO_BACK:
+        if object_type == TIMETABLE:
+            return convert_timetable_to_back(unknown_object)
+        elif object_type == COURSE:
+            return convert_course_to_back(unknown_object)
+        elif object_type == PROFESSOR:
+            return convert_professor_to_back(unknown_object)
