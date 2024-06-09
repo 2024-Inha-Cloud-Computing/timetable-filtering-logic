@@ -1,5 +1,6 @@
 from constant_variable import *
 from module.is_valid_timetable import *
+from module.sort_timetable import *
 
 import pandas as pd
 
@@ -35,5 +36,7 @@ def auto_fill(timetable_df, pool_df, fill_credit):
     timetable_df = timetable_df.copy()
     timetable_df_list = []
     backtracking(timetable_df, pool_df, fill_credit, 0)
+
+    sort_timetable(SQAURE_AREA, timetable_df_list)
 
     return timetable_df_list

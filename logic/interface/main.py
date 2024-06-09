@@ -166,4 +166,4 @@ auto_fill_result = user.auto_fill_routine(
     69,
 )
 
-print(auto_fill_result)
+print(auto_fill_result[0])
