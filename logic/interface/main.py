@@ -99,6 +99,9 @@ class TimetableInterface:
             columns=[col for col in pool.columns if col.endswith("_to_drop")]
         )
 
+        # print(pool)
+        # exit()
+
         timetable_df_list_back_object = auto_fill(
             timetable_df_back_object, pool, fill_credit
         )
@@ -157,9 +160,9 @@ search_result = [
 ]
 
 auto_fill_result = user.auto_fill_routine(
-    MAJOR_MODE,
+    ELECTIVE_MODE,
     search_result,
-    9,
+    6,
     69,
 )
 

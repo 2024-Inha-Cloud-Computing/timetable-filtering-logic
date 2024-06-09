@@ -18,7 +18,10 @@ def import_processed_data():
             ).values.tolist()
         ]
         df_list = [
-            pd.read_csv(f"{PROCESSED_IMPORT_PATH}/{data_type}/{department_name}.csv")
+            pd.read_csv(
+                f"{PROCESSED_IMPORT_PATH}/{data_type}/{department_name}.csv",
+                index_col=0,
+            )
             for department_name in department_id_to_name
         ]
 
@@ -31,21 +34,29 @@ def import_processed_data():
             department_id_to_name_for_curriculum = department_id_to_name
             df_curriculum_list = df_list
 
-    entire_course_df = pd.read_csv(f"{PROCESSED_ENTIRE_COURSE_PATH}/entire_course.csv")
+    entire_course_df = pd.read_csv(
+        f"{PROCESSED_ENTIRE_COURSE_PATH}/entire_course.csv", index_col=0
+    )
     elective_course_df = pd.read_csv(
-        f"{PROCESSED_ENTIRE_COURSE_PATH}/elective_course.csv"
+        f"{PROCESSED_ENTIRE_COURSE_PATH}/elective_course.csv", index_col=0
     )
 
     entire_course_bit_df = convert_element_to_original_type(
-        pd.read_csv(f"{PROCESSED_TIME_STR_TO_BIT_PATH}/entire_course_bit.csv")
+        pd.read_csv(
+            f"{PROCESSED_TIME_STR_TO_BIT_PATH}/entire_course_bit.csv", index_col=0
+        )
     )
     elective_course_bit_df = convert_element_to_original_type(
-        pd.read_csv(f"{PROCESSED_TIME_STR_TO_BIT_PATH}/elective_course_bit.csv")
+        pd.read_csv(
+            f"{PROCESSED_TIME_STR_TO_BIT_PATH}/elective_course_bit.csv", index_col=0
+        )
     )
 
     course_by_all_time = [
         [
-            pd.read_csv(f"{PROCESSED_COURSE_BY_TIME_PATH}/{day}_{time}.csv")
+            pd.read_csv(
+                f"{PROCESSED_COURSE_BY_TIME_PATH}/{day}_{time}.csv", index_col=0
+            )
             for time in range(TIME_NUM)
         ]
         for day in range(DAY_NUM)
@@ -55,12 +66,14 @@ def import_processed_data():
         [
             convert_element_to_original_type(
                 pd.read_csv(
-                    f"{PROCESSED_COURSE_BY_DEPARTMENT_PATH}/{department_name}_major.csv"
+                    f"{PROCESSED_COURSE_BY_DEPARTMENT_PATH}/{department_name}_major.csv",
+                    index_col=0,
                 )
             ),
             convert_element_to_original_type(
                 pd.read_csv(
-                    f"{PROCESSED_COURSE_BY_DEPARTMENT_PATH}/{department_name}_liberal_required.csv"
+                    f"{PROCESSED_COURSE_BY_DEPARTMENT_PATH}/{department_name}_liberal_required.csv",
+                    index_col=0,
                 )
             ),
         ]
