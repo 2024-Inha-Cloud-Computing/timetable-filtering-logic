@@ -57,12 +57,12 @@ class TimetableInterface:
     def find_professor_routine(self, course_list):
         course_list_front_object = course_list
         course_df_back_object = convert_with_front(
-            TO_BACK, COURSE, course_list_front_object
+            TO_BACK, COURSE, course_list_front_object, self.__entire_course_bit_df
         )
 
         find_professor_back_object = find_professor(course_df_back_object)
         find_professor_front_object = convert_with_front(
-            TO_FRONT, COURSE, find_professor_back_object
+            TO_FRONT, PROFESSOR, find_professor_back_object
         )
 
         return find_professor_front_object
@@ -94,6 +94,7 @@ user_data = {
     "학과": "컴퓨터공학과-컴퓨터공학",
 }
 user = TimetableInterface(user_data)
-search_word = ""
+search_word = "컴퓨터"
 search_result = user.search_course_routine(search_word)
-print(search_result)
+find_professor_result = user.find_professor_routine(search_result)
+print(find_professor_result)

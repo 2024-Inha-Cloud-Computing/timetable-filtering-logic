@@ -60,8 +60,7 @@ def convert_course_to_front(course_df):
     course_df = course_df.drop_duplicates(subset="course_id", keep="first")
 
     course_list = []
-    print("asdf")
-
+    
     for _, course_series in course_df.iterrows():
         department_name = course_series["department"]
         if department_name.startswith("기타"):
@@ -77,10 +76,14 @@ def convert_course_to_front(course_df):
 def convert_course_to_back(entire_course_bit_df, course_list):
     course_df = pd.DataFrame()
 
-    for department, course_name, course_id in course_list:
-        course_df = course_df.append(
-            entire_course_bit_df[
-                entire_course_bit_df["course_id"] == course_id
+    for course_list_element in course_list:
+        department, course_name, course_id = course_list_element.split(", ")
+        course_df = pd.concat(
+            [
+                course_df,
+                entire_course_bit_df[
+                    entire_course_bit_df["course_id"] == course_id
+                ]
             ]
         )
 
@@ -88,7 +91,7 @@ def convert_course_to_back(entire_course_bit_df, course_list):
 
 
 def convert_professor_to_front(professor_dict):
-    pass
+    return professor_dict
 
 def convert_professor_to_back(entire_course_bit_df, professor_dict):
     professor_course_df = pd.DataFrame()
@@ -115,7 +118,7 @@ def convert_avoid_time_to_back(avoid_time_list):
     pass
 
 
-def convert_with_front(mode, object_type, unknown_object):
+def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=None):
     if mode == TO_FRONT:
         if object_type == TIMETABLE:
             return convert_timetable_to_front(unknown_object)
@@ -131,9 +134,9 @@ def convert_with_front(mode, object_type, unknown_object):
         if object_type == TIMETABLE:
             return convert_timetable_to_back(unknown_object)
         elif object_type == COURSE:
-            return convert_course_to_back(unknown_object)
+            return convert_course_to_back(entire_course_bit_df, unknown_object)
         elif object_type == PROFESSOR:
-            return convert_professor_to_back(unknown_object)
+            return convert_professor_to_back(entire_course_bit_df, unknown_object)
         elif object_type == AVOID_TIME:
             return convert_avoid_time_to_back(unknown_object)
         else:
