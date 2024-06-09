@@ -86,10 +86,8 @@ def import_processed_data():
 # 각 원소를 원래의 자료형으로 변환
 def convert_element_to_original_type(df):
     for column in df.columns:
-        if column in ["class_id"]:
+        if column in ["class_id", "credits"]:
             df[column] = df[column].astype(int)
-        elif column in ["credit"]:
-            df[column] = df[column].astype(float)
         elif column in ["time_classroom"]:
             # [ 0 0 0 0 0 0 0 ] string 형태로 저장된 ndarray를 ndarray로 변환
             df[column] = df[column].apply(

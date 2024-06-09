@@ -67,24 +67,46 @@ class TimetableInterface:
 
         return find_professor_front_object
 
-    def auto_fill_routine(self, mode, timetable_df, fill_grade, department=None):
+    def auto_fill_routine(
+        self,
+        mode,
+        timetable_list_front_object,
+        fill_credit,
+        department_id_by_curriculum=None,
+    ):
+        timetable_df_back_object = convert_with_front(
+            TO_BACK, TIMETABLE, timetable_list_front_object, self.__entire_course_bit_df
+        )
+
         pool_by_timetable = set_pool_by_timetable(
-            self.__entire_course_bit_df, timetable_df
+            self.__entire_course_bit_df, timetable_df_back_object
         )
         pool_by_mode = set_pool_by_mode(
             mode,
             self.__department_possible_df_list,
             self.__elective_course_bit_df,
-            department,
+            department_id_by_curriculum,
         )
 
         # 두 pool의 교집합
-        pool = pd.merge(pool_by_timetable, pool_by_mode)
-
-        timetable_df_list_back_object = auto_fill(timetable_df, pool, fill_grade)
-        timetable_df_list_front_object = convert_with_front(
-            TO_FRONT, TIMETABLE, timetable_df_list_back_object
+        pool = pd.merge(
+            pool_by_timetable,
+            pool_by_mode,
+            on="course_class_id",
+            suffixes=("", "_to_drop"),
         )
+        pool = pool.drop(
+            columns=[col for col in pool.columns if col.endswith("_to_drop")]
+        )
+
+        timetable_df_list_back_object = auto_fill(
+            timetable_df_back_object, pool, fill_credit
+        )
+
+        timetable_df_list_front_object = [
+            convert_with_front(TO_FRONT, TIMETABLE, timetable_df_back_object)
+            for timetable_df_back_object in timetable_df_list_back_object
+        ]
 
         return timetable_df_list_front_object
 
@@ -94,7 +116,51 @@ user_data = {
     "학과": "컴퓨터공학과-컴퓨터공학",
 }
 user = TimetableInterface(user_data)
-search_word = "컴퓨터"
-search_result = user.search_course_routine(search_word)
-find_professor_result = user.find_professor_routine(search_result)
-print(find_professor_result)
+search_word = "김지응"
+search_result = [
+    {
+        "day": "목",
+        "time": 12,
+        "duration": 1.5,
+        "subject": "프로그래밍언어 이론",
+        "room": "하-222",
+        "professor": "김지응",
+        "course_class_id": "CSE4232-001",
+    },
+    {
+        "day": "금",
+        "time": 12,
+        "duration": 1.5,
+        "subject": "프로그래밍언어 이론",
+        "room": "하-222",
+        "professor": "김지응",
+        "course_class_id": "CSE4232-001",
+    },
+    {
+        "day": "목",
+        "time": 15,
+        "duration": 1.5,
+        "subject": "컴파일러",
+        "room": "하-222",
+        "professor": "김지응",
+        "course_class_id": "CSE4312-002",
+    },
+    {
+        "day": "금",
+        "time": 15,
+        "duration": 1.5,
+        "subject": "컴파일러",
+        "room": "하-222",
+        "professor": "김지응",
+        "course_class_id": "CSE4312-002",
+    },
+]
+
+auto_fill_result = user.auto_fill_routine(
+    MAJOR_MODE,
+    search_result,
+    6,
+    69,
+)
+
+print(auto_fill_result)

@@ -23,17 +23,20 @@ def convert_timetable_element_to_front(course_series):
                     duration += 0.5
             else:
                 if time_head is not None:
-                    course_list.append(
-                        {
-                            "day": day_list[day_index],
-                            "time": time_head,
-                            "duration": duration,
-                            "subject": course_series["course_name"],
-                            "room": course_series["classroom"][day_list[day_index]],
-                            "professor": course_series["professor"],
-                            "course_class_id": course_series["course_class_id"],
-                        }
-                    )
+                    try:
+                        course_list.append(
+                            {
+                                "day": day_list[day_index],
+                                "time": time_head,
+                                "duration": duration,
+                                "subject": course_series["course_name"],
+                                "room": course_series["classroom"][day_list[day_index]],
+                                "professor": course_series["professor"],
+                                "course_class_id": course_series["course_class_id"],
+                            }
+                        )
+                    except:
+                        raise KeyError(f"KeyError: {course_series['classroom']}")
                     time_head = None
                     duration = 0
 
@@ -51,8 +54,25 @@ def convert_timetable_to_front(timetable_df):
 
     return timetable_list
 
-def convert_timetable_to_back(timetable_df):
-    pass
+def convert_timetable_to_back(entire_course_bit_df, timetable_list):
+    course_class_id_set = set()
+
+    for timetable_element in timetable_list:
+        course_class_id_set.add(timetable_element["course_class_id"])
+
+    timetable_df = pd.DataFrame()
+
+    for course_class_id in course_class_id_set:
+        timetable_df = pd.concat(
+            [
+                timetable_df,
+                entire_course_bit_df[
+                    entire_course_bit_df["course_class_id"] == course_class_id
+                ]
+            ]
+        )
+
+    return timetable_df
 
 # 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_course_to_front(course_df):
@@ -132,7 +152,7 @@ def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=N
             raise ValueError("object_type이 잘못되었습니다.")
     elif mode == TO_BACK:
         if object_type == TIMETABLE:
-            return convert_timetable_to_back(unknown_object)
+            return convert_timetable_to_back(entire_course_bit_df, unknown_object)
         elif object_type == COURSE:
             return convert_course_to_back(entire_course_bit_df, unknown_object)
         elif object_type == PROFESSOR:
