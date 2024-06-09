@@ -13,3 +13,9 @@ def is_valid_timetable(timetable_df):
         temp = np.bitwise_or(temp, time_classroom)
 
     return True
+
+
+def is_valid_course(course_df, timetable_df):
+    timetable_or = np.bitwise_or.reduce(timetable_df["time_classroom"])
+
+    return not np.bitwise_and(timetable_or, course_df["time_classroom"]).any()
