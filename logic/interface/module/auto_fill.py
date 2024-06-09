@@ -1,6 +1,3 @@
-import numpy as np
-import pandas as pd
-
 from constant_variable import *
 from module.is_valid_timetable import *
 

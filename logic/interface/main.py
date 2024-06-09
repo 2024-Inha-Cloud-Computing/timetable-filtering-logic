@@ -56,11 +56,11 @@ class TimetableInterface:
 
     def find_professor_routine(self, course_list):
         course_list_front_object = course_list
-        course_list_back_object = convert_with_front(
+        course_df_back_object = convert_with_front(
             TO_BACK, "course", course_list_front_object
         )
 
-        find_professor_back_object = find_professor(course_list_back_object)
+        find_professor_back_object = find_professor(course_df_back_object)
         find_professor_front_object = convert_with_front(
             TO_FRONT, "course", find_professor_back_object
         )
