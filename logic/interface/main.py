@@ -160,9 +160,9 @@ search_result = [
 ]
 
 auto_fill_result = user.auto_fill_routine(
-    ELECTIVE_MODE,
+    MAJOR_MODE,
     search_result,
-    6,
+    12,
     69,
 )
 

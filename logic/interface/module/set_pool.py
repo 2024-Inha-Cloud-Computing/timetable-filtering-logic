@@ -9,12 +9,16 @@ def set_pool_by_timetable(entire_course_bit_df, timetable_df):
     pool = entire_course_bit_df.copy()
 
     timetable_df_course_id_set = set(timetable_df["course_id"].tolist())
+    timetable_df_grade_set = set(timetable_df["grade"].tolist())
 
     for index, course_series in pool.iterrows():
         if not is_valid_course(course_series, timetable_df):
             pool = pool.drop(index, errors="ignore")
 
         if course_series["course_id"] in timetable_df_course_id_set:
+            pool = pool.drop(index, errors="ignore")
+
+        if course_series["grade"] not in timetable_df_grade_set:
             pool = pool.drop(index, errors="ignore")
 
     return pool
