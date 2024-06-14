@@ -38,3 +38,7 @@ def set_pool_by_mode(
         pool = elective_course_bit_df
 
     return pool
+
+
+def set_pool_by_filter(filter_data, pool_df):
+    

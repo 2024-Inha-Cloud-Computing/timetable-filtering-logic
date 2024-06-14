@@ -80,6 +80,7 @@ class TimetableInterface:
 
     def auto_fill_routine(
         self,
+        filter_data,
         mode,
         timetable_list_front_object,
         fill_credit,
@@ -89,9 +90,11 @@ class TimetableInterface:
             TO_BACK, TIMETABLE, timetable_list_front_object, self.__entire_course_bit_df
         )
 
+        # 시간표에 들어갈 수 있는 강의들의 pool
         pool_by_timetable = set_pool_by_timetable(
             self.__entire_course_bit_df, timetable_df_back_object
         )
+        # 현재 mode에 맞는 강의들의 pool
         pool_by_mode = set_pool_by_mode(
             mode,
             self.__department_possible_df_list,
@@ -100,18 +103,23 @@ class TimetableInterface:
         )
 
         # 두 pool의 교집합
-        pool = pd.merge(
+        pool_df = pd.merge(
             pool_by_timetable,
             pool_by_mode,
             on="course_class_id",
             suffixes=("", "_to_drop"),
         )
-        pool = pool.drop(
-            columns=[col for col in pool.columns if col.endswith("_to_drop")]
+        pool_df = pool_df.drop(
+            columns=[col for col in pool_df.columns if col.endswith("_to_drop")]
         )
 
+        # pool에서 필터링
+        filter_front_object = filter_data
+        filter_back_object = convert_with_front(TO_BACK, FILTER, filter_data)
+        pool_df = set_pool_by_filter(filter_back_object, pool_df)
+
         timetable_df_list_back_object = auto_fill(
-            timetable_df_back_object, pool, fill_credit
+            timetable_df_back_object, pool_df, fill_credit
         )
 
         timetable_df_list_front_object = [
@@ -165,9 +173,7 @@ search_result = [
     },
 ]
 
-print(
-    convert_avoid_time_to_back(["월요일 15시 30분 ~ 17시 30분", "금요일 17시 ~ 19시"])
-)
+print(convert_filter_to_back(["월요일 15시 30분 ~ 17시 30분", "금요일 17시 ~ 19시"]))
 exit()
 
 print(user.require_course_timetable_routine(user.search_course_routine(search_word)))

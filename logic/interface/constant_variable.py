@@ -21,6 +21,11 @@ PM = False
 SPACE_TRUE = True
 SPACE_FALSE = False
 
+# filter type
+AVOID_TIME = 0
+PREFER_PROFESSOR = 1
+AVOID_PROFESSOR = 2
+
 # convert mode
 TO_FRONT = 0
 TO_BACK = 1
@@ -29,7 +34,7 @@ TO_BACK = 1
 TIMETABLE = 0
 COURSE = 1
 PROFESSOR = 2
-AVOID_TIME = 3
+FILTER = 3
 
 # auto_fill mode
 MAJOR_MODE = 0

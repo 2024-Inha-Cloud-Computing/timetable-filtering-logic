@@ -128,13 +128,15 @@ def convert_professor_to_back(entire_course_bit_df, professor_dict):
     return professor_course_df
 
 
-def convert_avoid_time_to_front(avoid_time_bit):
+def convert_filter_to_front(avoid_time_bit):
     pass
 
-def convert_avoid_time_to_back(avoid_time_list):
+def convert_filter_to_back(filter_data):
+    # 1. 필터에서 피해야 할 시간을 bit로 변환
     # 예시
     # "월요일 15시 30분 ~ 17시 30분"
     # "금요일 17시 ~ 19시"
+    avoid_time_list = filter_data[AVOID_TIME]
     avoid_time_bit = [0] * DAY_NUM
 
     for avoid_time in avoid_time_list:
@@ -161,7 +163,32 @@ def convert_avoid_time_to_back(avoid_time_list):
         for time_index in range((int(start_hour) - 9) * 2 + int(start_minute) // 30, (int(end_hour) - 9) * 2 + int(end_minute) // 30):
             avoid_time_bit[day_index] |= 1 << time_index
 
-    return avoid_time_bit
+    filter_data[AVOID_TIME] = avoid_time_bit
+
+    # 2. 필터에서 선호하는 교수를 dict로 변환
+    # 예시
+    # {"컴퓨터공학과, 컴파일러, CES4312" : "김지응", "컴퓨터공학과, 프로그래밍언어 이론, CES4232" : "김지응"}
+    prefer_professor_front_dict = filter_data[PREFER_PROFESSOR]
+    prefer_professor_back_dict = {}
+    for course, professor in prefer_professor_front_dict.items():
+        department, course_name, course_id = course.split(", ")
+        prefer_professor_back_dict[course_id] = professor
+
+    filter_data[PREFER_PROFESSOR] = prefer_professor_back_dict
+
+    # 3. 필터에서 피해야 할 교수를 dict로 변환
+    # 예시
+    # {"컴퓨터공학과, 컴파일러, CES4312" : "김지응", "컴퓨터공학과, 프로그래밍언어 이론, CES4232" : "김지응"}
+    avoid_professor_front_dict = filter_data[AVOID_PROFESSOR]
+    avoid_professor_back_dict = {}
+    for course, professor in avoid_professor_front_dict.items():
+        department, course_name, course_id = course.split(", ")
+        avoid_professor_back_dict[course_id] = professor
+
+    filter_data[AVOID_PROFESSOR] = avoid_professor_back_dict
+
+    return filter_data
+
 
 def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=None):
     if mode == TO_FRONT:
@@ -171,8 +198,8 @@ def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=N
             return convert_course_to_front(unknown_object)
         elif object_type == PROFESSOR:
             return convert_professor_to_front(unknown_object)
-        elif object_type == AVOID_TIME:
-            return convert_avoid_time_to_front(unknown_object)
+        elif object_type == FILTER:
+            return convert_filter_to_front(unknown_object)
         else:
             raise ValueError("object_type이 잘못되었습니다.")
     elif mode == TO_BACK:
@@ -182,8 +209,8 @@ def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=N
             return convert_course_to_back(entire_course_bit_df, unknown_object)
         elif object_type == PROFESSOR:
             return convert_professor_to_back(entire_course_bit_df, unknown_object)
-        elif object_type == AVOID_TIME:
-            return convert_avoid_time_to_back(unknown_object)
+        elif object_type == FILTER:
+            return convert_filter_to_back(unknown_object)
         else:
             raise ValueError("object_type이 잘못되었습니다.")
     else:
