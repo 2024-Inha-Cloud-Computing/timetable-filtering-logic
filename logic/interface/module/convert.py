@@ -133,10 +133,35 @@ def convert_avoid_time_to_front(avoid_time_bit):
 
 def convert_avoid_time_to_back(avoid_time_list):
     # 예시
-    # "월요일 3시 30분 ~ 5시 30분"
-    # "금요일 5시 ~ 7시"
-    pass
+    # "월요일 15시 30분 ~ 17시 30분"
+    # "금요일 17시 ~ 19시"
+    avoid_time_bit = [0] * DAY_NUM
 
+    for avoid_time in avoid_time_list:
+        # 요일, 시간 추출
+        day, time = avoid_time.split("요일 ")
+        # 시작 시간 추출
+        start_time = time.split("~")[0]
+        start_hour = start_time.split("시")[0]
+        if "분" in start_time:
+            start_minute = start_time.split("시")[1].split("분")[0]
+        else:
+            start_minute = "0"
+        # 종료 시간 추출
+        end_time = time.split("~")[1]
+        end_hour = end_time.split("시")[0]
+        if "분" in end_time:
+            end_minute = end_time.split("시")[1].split("분")[0]
+        else:
+            end_minute = "0"
+
+        # 요일 bit 설정
+        day_index = ["월", "화", "수", "목", "금", "토"].index(day)
+        # 시간 bit 설정
+        for time_index in range((int(start_hour) - 9) * 2 + int(start_minute) // 30, (int(end_hour) - 9) * 2 + int(end_minute) // 30):
+            avoid_time_bit[day_index] |= 1 << time_index
+
+    return avoid_time_bit
 
 def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=None):
     if mode == TO_FRONT:

@@ -110,9 +110,6 @@ class TimetableInterface:
             columns=[col for col in pool.columns if col.endswith("_to_drop")]
         )
 
-        # print(pool)
-        # exit()
-
         timetable_df_list_back_object = auto_fill(
             timetable_df_back_object, pool, fill_credit
         )
@@ -167,6 +164,11 @@ search_result = [
         "course_class_id": "CSE4312-002",
     },
 ]
+
+print(
+    convert_avoid_time_to_back(["월요일 15시 30분 ~ 17시 30분", "금요일 17시 ~ 19시"])
+)
+exit()
 
 print(user.require_course_timetable_routine(user.search_course_routine(search_word)))
 
