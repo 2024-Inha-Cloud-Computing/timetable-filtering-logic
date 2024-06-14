@@ -13,10 +13,13 @@ DAY_NUM = 7
 TIME_NUM = 31
 
 # user taste
-AM = 0
-PM = 1
-SPACE_ON = 0
-SPACE_OFF = 1
+AMPM = 0
+TIME1 = 1
+SPACE = 2
+AM = True
+PM = False
+SPACE_TRUE = True
+SPACE_FALSE = False
 
 # convert mode
 TO_FRONT = 0

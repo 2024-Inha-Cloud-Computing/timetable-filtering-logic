@@ -2,10 +2,11 @@
 
 from constant_variable import *
 from module.import_processed_data import *
-from module.search_course import *
-from module.is_valid_timetable import *
 from module.convert import *
+from module.search_course import *
+from module.require_course_timetable import *
 from module.find_professor import *
+from module.is_valid_timetable import *
 from module.auto_fill import *
 from module.set_pool import *
 
@@ -14,11 +15,7 @@ import pandas as pd
 
 class TimetableInterface:
     def __init__(self, user_taste):
-        self.__user_taste = {
-            "am_pm": AM,
-            "time1": 2,
-            "space": SPACE_ON,
-        }
+        self.__user_taste = user_taste
         self.__user_timetable_df_list = []
 
         # 강의 데이터 불러오기
@@ -53,6 +50,20 @@ class TimetableInterface:
         )
 
         return search_course_front_object
+
+    def require_course_timetable_routine(self, course_list):
+        course_list_front_object = course_list
+        course_df_back_object = convert_with_front(
+            TO_BACK, COURSE, course_list_front_object, self.__entire_course_bit_df
+        )
+
+        timetable_df_list_back_object = require_course_timetable(course_df_back_object)
+        timetable_df_list_front_object = [
+            convert_with_front(TO_FRONT, TIMETABLE, timetable_df_back_object)
+            for timetable_df_back_object in timetable_df_list_back_object
+        ]
+
+        return timetable_df_list_front_object
 
     def find_professor_routine(self, course_list):
         course_list_front_object = course_list
@@ -115,11 +126,9 @@ class TimetableInterface:
 
 
 # 테스트 코드
-user_data = {
-    "학과": "컴퓨터공학과-컴퓨터공학",
-}
-user = TimetableInterface(user_data)
-search_word = "김지응"
+user_taste = [True, 2, False]
+user = TimetableInterface(user_taste)
+search_word = "박준석"
 search_result = [
     {
         "day": "목",
@@ -159,11 +168,13 @@ search_result = [
     },
 ]
 
-auto_fill_result = user.auto_fill_routine(
-    MAJOR_MODE,
-    search_result,
-    12,
-    69,
-)
+print(user.require_course_timetable_routine(user.search_course_routine(search_word)))
 
-print(auto_fill_result[0])
+# auto_fill_result = user.auto_fill_routine(
+#     MAJOR_MODE,
+#     search_result,
+#     12,
+#     69,
+# )
+
+# print(auto_fill_result[0])
