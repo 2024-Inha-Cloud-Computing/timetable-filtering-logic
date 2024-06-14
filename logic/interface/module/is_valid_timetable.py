@@ -16,6 +16,9 @@ def is_valid_timetable(timetable_df):
 
 
 def is_valid_course(course_series, timetable_df):
+    if timetable_df.empty:
+        return True
+
     timetable_or = np.bitwise_or.reduce(timetable_df["time_classroom"].tolist())
 
     # 시간이 겹치는지 확인

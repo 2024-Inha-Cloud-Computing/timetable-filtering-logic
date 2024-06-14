@@ -115,7 +115,7 @@ class TimetableInterface:
 
         # pool에서 필터링
         filter_front_object = filter_data
-        filter_back_object = convert_with_front(TO_BACK, FILTER, filter_data)
+        filter_back_object = convert_with_front(TO_BACK, FILTER, filter_front_object)
         pool_df = set_pool_by_filter(filter_back_object, pool_df)
 
         timetable_df_list_back_object = auto_fill(
@@ -173,16 +173,19 @@ search_result = [
     },
 ]
 
-print(convert_filter_to_back(["월요일 15시 30분 ~ 17시 30분", "금요일 17시 ~ 19시"]))
-exit()
+auto_fill_result = user.auto_fill_routine(
+    [
+        ["월요일 15시 ~ 16시 30분", "수요일 15시 ~ 16시 30분"],
+        {
+            "컴퓨터공학과, 컴파일러, CSE4312": "김지응",
+            "컴퓨터공학과, 프로그래밍언어 이론, CSE4232": "김지응",
+        },
+        {"컴퓨터공학과, 컴파일러, CSE4312": "박준석"},
+    ],
+    MAJOR_MODE,
+    [],
+    9,
+    69,
+)
 
-print(user.require_course_timetable_routine(user.search_course_routine(search_word)))
-
-# auto_fill_result = user.auto_fill_routine(
-#     MAJOR_MODE,
-#     search_result,
-#     12,
-#     69,
-# )
-
-# print(auto_fill_result[0])
+print(auto_fill_result)

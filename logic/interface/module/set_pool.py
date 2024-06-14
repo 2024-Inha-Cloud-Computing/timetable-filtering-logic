@@ -18,8 +18,8 @@ def set_pool_by_timetable(entire_course_bit_df, timetable_df):
         if course_series["course_id"] in timetable_df_course_id_set:
             pool = pool.drop(index, errors="ignore")
 
-        if course_series["grade"] not in timetable_df_grade_set:
-            pool = pool.drop(index, errors="ignore")
+        # if course_series["grade"] not in timetable_df_grade_set:
+        #     pool = pool.drop(index, errors="ignore")
 
     return pool
 
@@ -41,4 +41,26 @@ def set_pool_by_mode(
 
 
 def set_pool_by_filter(filter_data, pool_df):
-    
+    avoid_time_bit = filter_data[AVOID_TIME]
+    prefer_professor_dict = filter_data[PREFER_PROFESSOR]
+    avoid_professor_dict = filter_data[AVOID_PROFESSOR]
+
+    for index, course_series in pool_df.iterrows():
+        if np.bitwise_and(avoid_time_bit, course_series["time_classroom"]).any():
+            pool_df = pool_df.drop(index, errors="ignore")
+
+        for course_id, professor in prefer_professor_dict.items():
+            if (
+                course_series["course_id"] == course_id
+                and course_series["professor"] != professor
+            ):
+                pool_df = pool_df.drop(index, errors="ignore")
+
+        for course_id, professor in avoid_professor_dict.items():
+            if (
+                course_series["course_id"] == course_id
+                and course_series["professor"] == professor
+            ):
+                pool_df = pool_df.drop(index, errors="ignore")
+
+    return pool_df

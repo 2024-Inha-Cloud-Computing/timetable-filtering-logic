@@ -60,7 +60,7 @@ def convert_timetable_to_back(entire_course_bit_df, timetable_list):
     for timetable_element in timetable_list:
         course_class_id_set.add(timetable_element["course_class_id"])
 
-    timetable_df = pd.DataFrame()
+    timetable_df = pd.DataFrame(columns=entire_course_bit_df.columns)
 
     for course_class_id in course_class_id_set:
         timetable_df = pd.concat(
