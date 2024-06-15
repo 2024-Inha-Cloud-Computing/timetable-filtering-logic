@@ -14,6 +14,12 @@ import pandas as pd
 
 
 class TimetableInterface:
+    """
+    프론트의 요청에 따라 백엔드의 기능을 수행하는 클래스
+    input: 사용자의 취향 list [오전/오후 수업, 1교시 수업 수, 우주 공강 여부]
+    output: 없음
+    """
+
     def __init__(self, user_taste):
         self.__user_taste = (
             user_taste  # [오전/오후 수업, 1교시 수업 수, 우주 공강 여부]
@@ -44,6 +50,11 @@ class TimetableInterface:
         ) = import_processed_data()
 
     def search_course_routine(self, search_word=""):
+        """
+        검색어를 받아 검색 결과를 반환하는 함수
+        input: 검색어 string
+        output: 검색 결과 list
+        """
         search_course_back_opject = search_course(
             search_word, self.__entire_course_bit_df
         )
@@ -54,6 +65,11 @@ class TimetableInterface:
         return search_course_front_object
 
     def require_course_timetable_routine(self, course_list):
+        """
+        강의 리스트를 받아 이 강의로만 이루어진 시간표를 반환하는 함수
+        input: 강의 list
+        output: 시간표 list
+        """
         course_list_front_object = course_list
         course_df_back_object = convert_with_front(
             TO_BACK, COURSE, course_list_front_object, self.__entire_course_bit_df
@@ -68,6 +84,11 @@ class TimetableInterface:
         return timetable_df_list_front_object
 
     def find_professor_routine(self, course_list):
+        """
+        강의 리스트를 받아 이 강의들의 교수님을 반환하는 함수
+        input: 강의 list
+        output: 강의-교수님 dict {강의 이름: 교수님 이름}
+        """
         course_list_front_object = course_list
         course_df_back_object = convert_with_front(
             TO_BACK, COURSE, course_list_front_object, self.__entire_course_bit_df
@@ -88,6 +109,11 @@ class TimetableInterface:
         fill_credit,
         department_id_by_curriculum=None,
     ):
+        """
+        시간표를 자동으로 채워주는 함수
+        input: 필터링 조건, 모드 (상수), 채울 시간표, 채울 학점, 학과 이름
+        output: 채워진 시간표 list
+        """
         # front 형식의 시간표를 back 형식으로 변환
         timetable_df_back_object = convert_with_front(
             TO_BACK, TIMETABLE, timetable_list_front_object, self.__entire_course_bit_df

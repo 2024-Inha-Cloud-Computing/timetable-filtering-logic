@@ -3,34 +3,42 @@
 
 ## Logic
 
-### 1. Filtering
-#### Filtering Class
+### 1. Interface
+#### 🔁 TimetableInterface
 - 클래스 설명
-  - 필터링 인터페이스
+  - 프론트 - 백 알고리즘 인터페이스
 
 <details>
   <summary>클래스 구성</summary>
   
-  ##### Filtering
-  - private 변수
-    - __department_name_to_id: dict
-    - __department_id_to_name: list[str]
-    - __department_course_df_list: list[DataFrame]
-    - __entire_course_df: DataFrame
-    - __entire_course_bit_df: DataFrame
-    - __course_by_all_time: list[list[DataFrame]]
-  - private 함수
-    - __import_processed_data
+  ##### __init__
+  - 클래스 초기화 함수
+  - **input** 사용자의 취향 list [오전/오후 수업, 1교시 수업 수, 우주 공강 여부]
+  - **output** 없음
 
-  - public 함수
-    - search_course_routine
+  ##### search_course_routine
+  - 검색어를 받아 검색 결과를 반환하는 함수
+  - **input** 검색어 string
+  - **output** 검색 결과 list
+
+  ##### require_course_timetable_routine
+  - 강의 리스트를 받아 이 강의로만 이루어진 시간표를 반환하는 함수
+  - **input** 강의 list
+  - **output** 시간표 list
+
+  ##### find_professor_routine
+  - 강의 리스트를 받아 이 강의들의 교수님을 반환하는 함수
+  - **input** 강의 list
+  - **output** 강의-교수님 dict {강의 이름: 교수님 이름}
+
+  ##### auto_fill_routine
+  - 시간표를 자동으로 채워주는 함수
+  - **input** 필터링 조건, 모드 (상수), 채울 시간표, 채울 학점, 학과 이름
+  - **output** 채워진 시간표 list
 
 </details>
 
-### 2. Making
-열심히 만드는 중...
-
-### 3. Processing
+### 2. Processing
 #### ✅ import_csv
 - 모듈 설명
   - 학과 강의 및 커리큘럼 csv 파일 생성 모듈
