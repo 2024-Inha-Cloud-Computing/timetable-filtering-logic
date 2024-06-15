@@ -160,7 +160,7 @@ def convert_filter_to_back(filter_data):
         # 요일 bit 설정
         day_index = ["월", "화", "수", "목", "금", "토"].index(day)
         # 시간 bit 설정
-        for time_index in range((int(start_hour) - 9) * 2 + int(start_minute) // 30, (int(end_hour) - 9) * 2 + int(end_minute) // 30):
+        for time_index in range((int(start_hour) - 9) * 2 + int(start_minute) // 30 + 1, (int(end_hour) - 9) * 2 + int(end_minute) // 30 + 1):
             avoid_time_bit[day_index] |= 1 << time_index
 
     filter_data[AVOID_TIME] = avoid_time_bit

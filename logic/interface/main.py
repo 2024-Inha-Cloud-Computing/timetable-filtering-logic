@@ -15,7 +15,9 @@ import pandas as pd
 
 class TimetableInterface:
     def __init__(self, user_taste):
-        self.__user_taste = user_taste
+        self.__user_taste = (
+            user_taste  # [오전/오후 수업, 1교시 수업 수, 우주 공강 여부]
+        )
         self.__user_timetable_df_list = []
 
         # 강의 데이터 불러오기
@@ -86,15 +88,16 @@ class TimetableInterface:
         fill_credit,
         department_id_by_curriculum=None,
     ):
+        # front 형식의 시간표를 back 형식으로 변환
         timetable_df_back_object = convert_with_front(
             TO_BACK, TIMETABLE, timetable_list_front_object, self.__entire_course_bit_df
         )
 
-        # 시간표에 들어갈 수 있는 강의들의 pool
+        # 시간표에 들어갈 수 있는 강의들의 pool 생성
         pool_by_timetable = set_pool_by_timetable(
             self.__entire_course_bit_df, timetable_df_back_object
         )
-        # 현재 mode에 맞는 강의들의 pool
+        # 현재 mode에 맞는 강의들의 pool 생성
         pool_by_mode = set_pool_by_mode(
             mode,
             self.__department_possible_df_list,
@@ -118,8 +121,14 @@ class TimetableInterface:
         filter_back_object = convert_with_front(TO_BACK, FILTER, filter_front_object)
         pool_df = set_pool_by_filter(filter_back_object, pool_df)
 
+        # pool에서 시간표 생성
         timetable_df_list_back_object = auto_fill(
             timetable_df_back_object, pool_df, fill_credit
+        )
+
+        # 시간표 정렬
+        timetable_df_list_back_object = sort_timetable(
+            TASTE, timetable_df_list_back_object, self.__user_taste
         )
 
         timetable_df_list_front_object = [
@@ -131,7 +140,7 @@ class TimetableInterface:
 
 
 # 테스트 코드
-user_taste = [True, 2, False]
+user_taste = [False, 2, False]
 user = TimetableInterface(user_taste)
 search_word = "박준석"
 search_result = [
@@ -183,9 +192,9 @@ auto_fill_result = user.auto_fill_routine(
         {"컴퓨터공학과, 컴파일러, CSE4312": "박준석"},
     ],
     MAJOR_MODE,
-    [],
+    search_result,
     9,
     69,
 )
 
-print(auto_fill_result)
+print(auto_fill_result[0])

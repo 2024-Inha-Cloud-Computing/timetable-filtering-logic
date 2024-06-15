@@ -37,6 +37,4 @@ def auto_fill(timetable_df, pool_df, fill_credit):
     timetable_df_list = []
     backtracking(timetable_df, pool_df, fill_credit, 0)
 
-    sort_timetable(SQAURE_AREA, timetable_df_list)
-
     return timetable_df_list

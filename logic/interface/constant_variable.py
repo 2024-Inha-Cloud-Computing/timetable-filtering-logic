@@ -43,3 +43,4 @@ ELECTIVE_MODE = 2
 
 # sort mode
 SQAURE_AREA = 0
+TASTE = 1
