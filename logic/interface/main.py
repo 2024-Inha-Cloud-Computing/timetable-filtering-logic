@@ -6,6 +6,7 @@ from module.convert import *
 from module.search_course import *
 from module.require_course_timetable import *
 from module.find_professor import *
+from module.filter_timetable import *
 from module.is_valid_timetable import *
 from module.auto_fill import *
 from module.set_pool import *
@@ -100,6 +101,33 @@ class TimetableInterface:
         )
 
         return find_professor_front_object
+
+    def timetable_filter_routine(
+        self, timetable_list_front_object, filter_data_front_object
+    ):
+        """
+        시간표 리스트와 필터링 조건을 받아 필터링된 시간표 리스트를 반환하는 함수
+        input: 시간표 list, 필터링 조건 list
+        output: 필터링된 시간표 list
+        """
+        timetable_df_list_back_object = [
+            convert_with_front(TO_BACK, TIMETABLE, timetable_list_element_front_object)
+            for timetable_list_element_front_object in timetable_list_front_object
+        ]
+        filter_back_object = convert_with_front(
+            TO_BACK, FILTER, filter_data_front_object
+        )
+
+        timetable_df_list_back_object = filter_timetable(
+            timetable_df_list_back_object, filter_back_object
+        )
+
+        timetable_list_front_object = [
+            convert_with_front(TO_FRONT, TIMETABLE, timetable_df_back_object)
+            for timetable_df_back_object in timetable_df_list_back_object
+        ]
+
+        return timetable_list_front_object
 
     def auto_fill_routine(
         self,
