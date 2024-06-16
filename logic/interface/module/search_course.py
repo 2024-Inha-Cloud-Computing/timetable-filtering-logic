@@ -6,7 +6,7 @@
 # output: 검색어를 포함하는 강의 DataFrame
 def search_course(search_word, course_df):
     # 학수번호, 강의명, 학과명, 교수명 중에서 검색어를 포함하는 강의를 찾아줌
-    search_columns = ["course_id", "course_name", "professor"]
+    search_columns = ["course_id", "course_name", "department", "professor"]
 
     search_result = course_df[
         course_df[search_columns]

@@ -56,6 +56,7 @@ class TimetableInterface:
         input: 검색어 string
         output: 검색 결과 list
         """
+
         search_course_back_opject = search_course(
             search_word, self.__entire_course_bit_df
         )
@@ -196,7 +197,7 @@ class TimetableInterface:
 # 테스트 코드
 user_taste = [False, 2, False]
 user = TimetableInterface(user_taste)
-search_word = "박준석"
+search_word = "컴퓨터공학과"
 search_result = [
     {
         "day": "목",
@@ -235,6 +236,10 @@ search_result = [
         "course_class_id": "CSE4312-002",
     },
 ]
+
+search_result = user.search_course_routine(search_word)
+print(search_result)
+exit()
 
 auto_fill_result = user.auto_fill_routine(
     [
