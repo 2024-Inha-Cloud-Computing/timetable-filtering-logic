@@ -11,12 +11,14 @@ def set_pool_by_timetable(entire_course_bit_df, timetable_df):
     timetable_df_course_id_set = set(timetable_df["course_id"].tolist())
     timetable_df_grade_set = set(timetable_df["grade"].tolist())
 
-    for index, course_series in pool.iterrows():
+    for course_series in pool.itertuples():
         if not is_valid_course(course_series, timetable_df):
-            pool = pool.drop(index, errors="ignore")
+            pool = pool.drop(course_series.Index)
+            continue
 
-        if course_series["course_id"] in timetable_df_course_id_set:
-            pool = pool.drop(index, errors="ignore")
+        if course_series.course_id in timetable_df_course_id_set:
+            pool = pool.drop(course_series.Index)
+            continue
 
         # if course_series["grade"] not in timetable_df_grade_set:
         #     pool = pool.drop(index, errors="ignore")
@@ -69,24 +71,24 @@ def set_pool_by_filter(entire_course_bit_df, filter_data):
 
     pool_df = entire_course_bit_df.copy()
 
-    for index, course_series in entire_course_bit_df.iterrows():
-        if np.bitwise_and(avoid_time_bit, course_series["time_classroom"]).any():
-            pool_df = pool_df.drop(index, errors="ignore")
+    for course_series in entire_course_bit_df.itertuples():
+        if np.bitwise_and(avoid_time_bit, course_series.time_classroom).any():
+            pool_df = pool_df.drop(course_series.Index)
             continue
 
         course_id_cur, professor_cur = (
-            course_series["course_id"],
-            course_series["professor"],
+            course_series.course_id,
+            course_series.professor,
         )
 
         if course_id_cur in prefer_professor_dict:
             if professor_cur != prefer_professor_dict[course_id_cur]:
-                pool_df = pool_df.drop(index, errors="ignore")
+                pool_df = pool_df.drop(course_series.Index)
                 continue
 
         if course_id_cur in avoid_professor_dict:
             if professor_cur == avoid_professor_dict[course_id_cur]:
-                pool_df = pool_df.drop(index, errors="ignore")
+                pool_df = pool_df.drop(course_series.Index)
                 continue
 
     return pool_df

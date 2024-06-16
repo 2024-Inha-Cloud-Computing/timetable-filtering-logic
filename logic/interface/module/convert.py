@@ -7,7 +7,7 @@ import pandas as pd
 
 # 시간표에서 사용할 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_timetable_element_to_front(course_series):
-    course_time_classroom = course_series["time_classroom"]
+    course_time_classroom = course_series.time_classroom
     course_list = []
     day_list = ["월", "화", "수", "목", "금", "토", "셀"]
 
@@ -29,30 +29,33 @@ def convert_timetable_element_to_front(course_series):
                                 "day": day_list[day_index],
                                 "time": time_head,
                                 "duration": duration,
-                                "subject": course_series["course_name"],
-                                "room": course_series["classroom"][day_list[day_index]],
-                                "professor": course_series["professor"],
-                                "course_class_id": course_series["course_class_id"],
+                                "subject": course_series.course_name,
+                                "room": course_series.classroom[day_list[day_index]],
+                                "professor": course_series.professor,
+                                "course_class_id": course_series.course_class_id,
                             }
                         )
                     except:
-                        raise KeyError(f"KeyError: {course_series['classroom']}")
+                        raise KeyError(f"KeyError: {course_series.classroom}")
                     time_head = None
                     duration = 0
 
     return course_list
 
+
 def convert_timetable_element_to_back(course_series):
     pass
+
 
 # 시간표 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_timetable_to_front(timetable_df):
     timetable_list = []
 
-    for _, course_series in timetable_df.iterrows():
+    for course_series in timetable_df.itertuples():
         timetable_list += convert_timetable_element_to_front(course_series)
 
     return timetable_list
+
 
 def convert_timetable_to_back(entire_course_bit_df, timetable_list):
     course_class_id_set = set()
@@ -68,11 +71,12 @@ def convert_timetable_to_back(entire_course_bit_df, timetable_list):
                 timetable_df,
                 entire_course_bit_df[
                     entire_course_bit_df["course_class_id"] == course_class_id
-                ]
+                ],
             ]
         )
 
     return timetable_df
+
 
 # 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_course_to_front(course_df):
@@ -80,18 +84,20 @@ def convert_course_to_front(course_df):
     course_df = course_df.drop_duplicates(subset="course_id", keep="first")
 
     course_list = []
-    
-    for _, course_series in course_df.iterrows():
-        department_name = course_series["department"]
+
+    for course_series in course_df.itertuples():
+        department_name = course_series.department
         if department_name.startswith("기타"):
             department_name = department_name.split("-")[1]
         else:
             department_name = department_name.split("-")[0]
 
-        course_list.append(f"{department_name}, {course_series["course_name"]}, {course_series["course_id"]}")
-
+        course_list.append(
+            f"{department_name}, {course_series.course_name}, {course_series.course_id}"
+        )
 
     return course_list
+
 
 def convert_course_to_back(entire_course_bit_df, course_list):
     course_df = pd.DataFrame()
@@ -101,9 +107,7 @@ def convert_course_to_back(entire_course_bit_df, course_list):
         course_df = pd.concat(
             [
                 course_df,
-                entire_course_bit_df[
-                    entire_course_bit_df["course_id"] == course_id
-                ]
+                entire_course_bit_df[entire_course_bit_df["course_id"] == course_id],
             ]
         )
 
@@ -113,6 +117,7 @@ def convert_course_to_back(entire_course_bit_df, course_list):
 def convert_professor_to_front(professor_dict):
     return professor_dict
 
+
 def convert_professor_to_back(entire_course_bit_df, professor_dict):
     professor_course_df = pd.DataFrame()
 
@@ -121,7 +126,8 @@ def convert_professor_to_back(entire_course_bit_df, professor_dict):
         # course_id와 professor가 일치하는 row를 찾아서 추가
         professor_course_df = professor_course_df.append(
             entire_course_bit_df[
-                (entire_course_bit_df["course_id"] == course_id) and (entire_course_bit_df["professor"] == professor)
+                (entire_course_bit_df["course_id"] == course_id)
+                and (entire_course_bit_df["professor"] == professor)
             ]
         )
 
@@ -130,6 +136,7 @@ def convert_professor_to_back(entire_course_bit_df, professor_dict):
 
 def convert_filter_to_front(avoid_time_bit):
     pass
+
 
 def convert_filter_to_back(filter_data):
     # 1. 필터에서 피해야 할 시간을 bit로 변환
@@ -160,7 +167,10 @@ def convert_filter_to_back(filter_data):
         # 요일 bit 설정
         day_index = ["월", "화", "수", "목", "금", "토"].index(day)
         # 시간 bit 설정
-        for time_index in range((int(start_hour) - 9) * 2 + int(start_minute) // 30 + 1, (int(end_hour) - 9) * 2 + int(end_minute) // 30 + 1):
+        for time_index in range(
+            (int(start_hour) - 9) * 2 + int(start_minute) // 30 + 1,
+            (int(end_hour) - 9) * 2 + int(end_minute) // 30 + 1,
+        ):
             avoid_time_bit[day_index] |= 1 << time_index
 
     filter_data[AVOID_TIME] = avoid_time_bit

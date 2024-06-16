@@ -49,8 +49,8 @@ def get_square_area(timetable_df):
     time_head = sys.maxsize
     time_tail = 0
 
-    for _, course_series in timetable_df.iterrows():
-        course_time_classroom = course_series["time_classroom"]
+    for course_series in timetable_df.itertuples():
+        course_time_classroom = course_series.time_classroom
 
         for day_index, course_time_classroom_element in enumerate(
             course_time_classroom
@@ -75,8 +75,8 @@ def get_taste(timetable_df, user_taste):
     am_score = 0
     pm_score = 0
 
-    for _, course_series in timetable_df.iterrows():
-        course_time_classroom = course_series["time_classroom"]
+    for course_series in timetable_df.itertuples():
+        course_time_classroom = course_series.time_classroom
 
         am_score_bitwise_and = np.bitwise_and(
             am_bit, course_time_classroom, dtype=np.uint32
@@ -102,8 +102,8 @@ def get_taste(timetable_df, user_taste):
     # 각 수업의 1교시 점수 합산
     time1_score = 0
 
-    for _, course_series in timetable_df.iterrows():
-        course_time_classroom = course_series["time_classroom"]
+    for course_series in timetable_df.itertuples():
+        course_time_classroom = course_series.time_classroom
 
         time1_score_bitwise_and = np.bitwise_and(
             time1_bit, course_time_classroom, dtype=np.uint32

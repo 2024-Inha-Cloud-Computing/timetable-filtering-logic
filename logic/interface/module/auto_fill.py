@@ -14,16 +14,16 @@ def auto_fill(timetable_df, pool_df, fill_credit):
             timetable_df_list.append(timetable_df.copy())
             return
 
-        for index, course_series in pool_df.iterrows():
+        for course_series in pool_df.itertuples():
             if not is_valid_course(course_series, timetable_df):
                 continue
 
-            next_credit = cur_credit + course_series["credits"]
+            next_credit = cur_credit + course_series.credits
             if next_credit > fill_credit:
                 continue
 
-            timetable_df = pd.concat([timetable_df, course_series.to_frame().T])
-            pool_df_args = pool_df.copy().drop(index)
+            timetable_df = pd.concat([timetable_df, pd.DataFrame([course_series])])
+            pool_df_args = pool_df.copy().drop(course_series.Index)
             backtracking(
                 timetable_df,
                 pool_df_args,

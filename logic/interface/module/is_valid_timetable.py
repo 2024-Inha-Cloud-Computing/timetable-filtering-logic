@@ -22,13 +22,11 @@ def is_valid_course(course_series, timetable_df):
     timetable_or = np.bitwise_or.reduce(timetable_df["time_classroom"].tolist())
 
     # 시간이 겹치는지 확인
-    time_conflict = not np.bitwise_and(
-        timetable_or, course_series["time_classroom"]
-    ).any()
+    time_conflict = not np.bitwise_and(timetable_or, course_series.time_classroom).any()
 
     # 같은 과목인지 확인
     course_conflict = (
-        not timetable_df["course_id"].isin([course_series["course_id"]]).any()
+        not timetable_df["course_id"].isin([course_series.course_id]).any()
     )
 
     return time_conflict and course_conflict
