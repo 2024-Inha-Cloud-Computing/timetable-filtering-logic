@@ -108,7 +108,7 @@ class TimetableInterface:
     ):
         """
         시간표 리스트와 필터링 조건을 받아 필터링된 시간표 리스트를 반환하는 함수
-        input: 시간표 list, 필터링 조건 list
+        input: 시간표 list: list[list], 필터링 조건 list [avoid_time: list, prefer_professor: dict, avoid_professor: dict]
         output: 필터링된 시간표 list
         """
         timetable_df_list_back_object = [
@@ -253,7 +253,7 @@ class TimetableInterface:
 # 테스트 코드
 user_taste = [False, 2, False]
 user = TimetableInterface(user_taste)
-search_word = "컴퓨터공학과"
+search_word = "김지응"
 search_result = [
     {
         "day": "목",
@@ -303,7 +303,11 @@ auto_fill_result = user.auto_fill_routine(
         {"컴퓨터공학과, 컴파일러, CSE4312": "박준석"},
     ],
     search_result,
-    [[9, "컴퓨터공학과", "전공선택"], [3, "컴퓨터공학과", "교양필수"]],
+    [
+        [9, "컴퓨터공학과", "전공선택"],
+        [3, "컴퓨터공학과", "교양필수"],
+        [3, "핵심교양 1"],
+    ],
 )
 
 print(auto_fill_result[0])
