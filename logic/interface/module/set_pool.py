@@ -30,37 +30,63 @@ def set_pool_by_mode(
     elective_course_bit_df,
     department_id_by_curriculum,
 ):
-    if auto_fill_mode == MAJOR_MODE:
-        pool = department_possible_df_list[department_id_by_curriculum][0]
-    elif auto_fill_mode == LIBERAL_REQUIRED_MODE:
-        pool = department_possible_df_list[department_id_by_curriculum][1]
-    elif auto_fill_mode == ELECTIVE_MODE:
-        pool = elective_course_bit_df
+    if auto_fill_mode == "전공필수":
+        major_pool = department_possible_df_list[department_id_by_curriculum][0]
+        major_required_pool = major_pool[
+            major_pool["course_classification"] == "전공필수"
+        ]
+        return major_required_pool
+    elif auto_fill_mode == "전공선택":
+        major_pool = department_possible_df_list[department_id_by_curriculum][0]
+        major_elective_pool = major_pool[
+            major_pool["course_classification"] == "전공선택"
+        ]
+        return major_elective_pool
+    elif auto_fill_mode == "교양필수":
+        liberal_required_pool = department_possible_df_list[
+            department_id_by_curriculum
+        ][1]
+        return liberal_required_pool
+    elif auto_fill_mode.startswith("핵심교양"):
+        ged_num = auto_fill_mode[-1]
+        ged_pool = elective_course_bit_df[
+            elective_course_bit_df["course_id"].str.startswith(f"GED{ged_num}")
+        ]
+        return ged_pool
+    elif auto_fill_mode == "일반교양":
+        elective_pool = elective_course_bit_df[
+            elective_course_bit_df["department"] == "기타-일반교양"
+        ]
+        return elective_pool
+    else:
+        raise ValueError(f"유효하지 않은 auto_fill_mode: {auto_fill_mode}")
 
-    return pool
 
-
-def set_pool_by_filter(filter_data, pool_df):
+def set_pool_by_filter(entire_course_bit_df, filter_data):
     avoid_time_bit = filter_data[AVOID_TIME]
     prefer_professor_dict = filter_data[PREFER_PROFESSOR]
     avoid_professor_dict = filter_data[AVOID_PROFESSOR]
 
-    for index, course_series in pool_df.iterrows():
+    pool_df = entire_course_bit_df.copy()
+
+    for index, course_series in entire_course_bit_df.iterrows():
         if np.bitwise_and(avoid_time_bit, course_series["time_classroom"]).any():
             pool_df = pool_df.drop(index, errors="ignore")
+            continue
 
-        for course_id, professor in prefer_professor_dict.items():
-            if (
-                course_series["course_id"] == course_id
-                and course_series["professor"] != professor
-            ):
-                pool_df = pool_df.drop(index, errors="ignore")
+        course_id_cur, professor_cur = (
+            course_series["course_id"],
+            course_series["professor"],
+        )
 
-        for course_id, professor in avoid_professor_dict.items():
-            if (
-                course_series["course_id"] == course_id
-                and course_series["professor"] == professor
-            ):
+        if course_id_cur in prefer_professor_dict:
+            if professor_cur != prefer_professor_dict[course_id_cur]:
                 pool_df = pool_df.drop(index, errors="ignore")
+                continue
+
+        if course_id_cur in avoid_professor_dict:
+            if professor_cur == avoid_professor_dict[course_id_cur]:
+                pool_df = pool_df.drop(index, errors="ignore")
+                continue
 
     return pool_df

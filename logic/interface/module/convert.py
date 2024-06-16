@@ -201,7 +201,7 @@ def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=N
         elif object_type == FILTER:
             return convert_filter_to_front(unknown_object)
         else:
-            raise ValueError("object_type이 잘못되었습니다.")
+            raise ValueError(f"유효하지 않은 object_type: {object_type}")
     elif mode == TO_BACK:
         if object_type == TIMETABLE:
             return convert_timetable_to_back(entire_course_bit_df, unknown_object)
@@ -212,6 +212,6 @@ def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=N
         elif object_type == FILTER:
             return convert_filter_to_back(unknown_object)
         else:
-            raise ValueError("object_type이 잘못되었습니다.")
+            raise ValueError(f"유효하지 않은 object_type: {object_type}")
     else:
-        raise ValueError("mode가 잘못되었습니다.")
+        raise ValueError(f"유효하지 않은 mode: {mode}")

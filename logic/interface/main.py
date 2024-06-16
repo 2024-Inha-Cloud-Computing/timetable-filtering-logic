@@ -36,18 +36,12 @@ class TimetableInterface:
             self.__department_id_to_name_by_curriculum,
             self.__df_course_list,
             self.__df_curriculum_list,
-            # 전체 강의 DataFrame
-            self.__entire_course_df,
-            # 교양선택 DataFrame
-            self.__elective_course_df,
-            # 전체 강의 DataFrame (시간 bit ndarray)
-            self.__entire_course_bit_df,
-            # 교양선택 DataFrame
-            self.__elective_course_bit_df,
-            # 특정 시간 강의 DataFrame
-            self.__course_by_all_time,
-            # 학과별 전공, 교양필수 DataFrame
-            self.__department_possible_df_list,
+            self.__entire_course_df,  # 전체 강의 DataFrame
+            self.__elective_course_df,  # 교양선택 DataFrame
+            self.__entire_course_bit_df,  # 전체 강의 DataFrame (시간 bit ndarray)
+            self.__elective_course_bit_df,  # 교양선택 DataFrame
+            self.__course_by_all_time,  # 특정 시간 강의 DataFrame
+            self.__department_possible_df_list,  # 학과별 전공, 교양필수 DataFrame
         ) = import_processed_data()
 
     def search_course_routine(self, search_word=""):
@@ -131,67 +125,123 @@ class TimetableInterface:
         return timetable_list_front_object
 
     def auto_fill_routine(
-        self,
-        filter_data,
-        mode,
-        timetable_list_front_object,
-        fill_credit,
-        department_id_by_curriculum=None,
+        self, filter_data_front_object, timetable_front_object, mode_list_front_object
     ):
         """
         시간표를 자동으로 채워주는 함수
-        input: 필터링 조건, 모드 (상수), 채울 시간표, 채울 학점, 학과 이름
+        input: 필터링 조건, 시간표, 모드 list
         output: 채워진 시간표 list
         """
-        # front 형식의 시간표를 back 형식으로 변환
-        timetable_df_back_object = convert_with_front(
-            TO_BACK, TIMETABLE, timetable_list_front_object, self.__entire_course_bit_df
-        )
 
-        # 시간표에 들어갈 수 있는 강의들의 pool 생성
+        # front 형식의 데이터를 back 형식으로 변환
+        filter_data_back_object = convert_with_front(
+            TO_BACK, FILTER, filter_data_front_object
+        )
+        timetable_back_object = convert_with_front(
+            TO_BACK, TIMETABLE, timetable_front_object, self.__entire_course_bit_df
+        )
+        mode_list_back_object = []
+        for mode_list_front_object_element in mode_list_front_object:
+            mode_list_back_object_element = mode_list_front_object_element.copy()
+            if len(mode_list_back_object_element) == 3:
+                mode_list_back_object_element[1] = [
+                    value
+                    for key, value in self.__department_name_to_id_by_curriculum.items()
+                    if key.startswith(mode_list_back_object_element[1])
+                ][0]
+            mode_list_back_object.append(mode_list_back_object_element)
+
+        # mode와 filter_data에 따라 강의 pool 설정
+        print("강의 pool 설정 중...")
+        # 1. 시간표에 따른 강의 pool 설정
         pool_by_timetable = set_pool_by_timetable(
-            self.__entire_course_bit_df, timetable_df_back_object
-        )
-        # 현재 mode에 맞는 강의들의 pool 생성
-        pool_by_mode = set_pool_by_mode(
-            mode,
-            self.__department_possible_df_list,
-            self.__elective_course_bit_df,
-            department_id_by_curriculum,
+            self.__entire_course_bit_df, timetable_back_object
         )
 
-        # 두 pool의 교집합
-        pool_df = pd.merge(
+        # 2. filter_data에 따른 강의 pool 설정
+        pool_by_filter = set_pool_by_filter(
+            self.__entire_course_bit_df, filter_data_back_object
+        )
+
+        # 3. 1, 2의 교집합 설정
+        pool_by_timetable_and_filter = pd.merge(
             pool_by_timetable,
-            pool_by_mode,
+            pool_by_filter,
             on="course_class_id",
             suffixes=("", "_to_drop"),
         )
-        pool_df = pool_df.drop(
-            columns=[col for col in pool_df.columns if col.endswith("_to_drop")]
+        pool_by_timetable_and_filter = pool_by_timetable_and_filter.drop(
+            columns=[
+                col for col in pool_by_timetable_and_filter.columns if "to_drop" in col
+            ]
         )
 
-        # pool에서 필터링
-        filter_front_object = filter_data
-        filter_back_object = convert_with_front(TO_BACK, FILTER, filter_front_object)
-        pool_df = set_pool_by_filter(filter_back_object, pool_df)
-
-        # pool에서 시간표 생성
-        timetable_df_list_back_object = auto_fill(
-            timetable_df_back_object, pool_df, fill_credit
-        )
-
-        # 시간표 정렬
-        timetable_df_list_back_object = sort_timetable(
-            TASTE, timetable_df_list_back_object, self.__user_taste
-        )
-
-        timetable_df_list_front_object = [
-            convert_with_front(TO_FRONT, TIMETABLE, timetable_df_back_object)
-            for timetable_df_back_object in timetable_df_list_back_object
+        # 4. mode에 따른 강의 pool 설정
+        pool_by_mode_list = [
+            set_pool_by_mode(
+                (
+                    mode_list_back_object_element[2]
+                    if len(mode_list_back_object_element) == 3
+                    else mode_list_back_object_element[1]
+                ),
+                self.__department_possible_df_list,
+                self.__elective_course_bit_df,
+                (
+                    mode_list_back_object_element[1]
+                    if len(mode_list_back_object_element) == 3
+                    else None
+                ),
+            )
+            for mode_list_back_object_element in mode_list_back_object
         ]
 
-        return timetable_df_list_front_object
+        # 4. 통합된 강의 pool 설정
+        pool_list = []
+        for pool_by_mode in pool_by_mode_list:
+            pool = pd.merge(
+                pool_by_timetable_and_filter,
+                pool_by_mode,
+                on="course_class_id",
+                suffixes=("", "_to_drop"),
+            )
+            pool = pool.drop(columns=[col for col in pool.columns if "to_drop" in col])
+
+            pool_list.append(pool)
+
+        print("강의 pool 설정 완료!")
+
+        # 5. auto_fill 실행
+        print("시간표 자동 채우기 중...")
+        auto_fill_timetable_list = [timetable_back_object]
+
+        for pool, mode in zip(pool_list, mode_list_front_object):
+            print(f"{mode} 모드로 시간표 자동 채우기 중...")
+            auto_fill_timetable_list_next = []
+            for auto_fill_timetable in auto_fill_timetable_list:
+                auto_fill_timetable_list = auto_fill(
+                    auto_fill_timetable,
+                    pool,
+                    mode[0],
+                )
+                auto_fill_timetable_list_next.extend(auto_fill_timetable_list)
+
+            auto_fill_timetable_list = sort_timetable_by_taste(
+                auto_fill_timetable_list_next, self.__user_taste
+            )[:10]
+
+            print(f"\n{mode} 모드로 시간표 자동 채우기 완료!")
+            print(f"총 {len(auto_fill_timetable_list_next)}개의 시간표 생성됨")
+
+        print("시간표 자동 채우기 완료!")
+        print(f"총 {len(auto_fill_timetable_list_next)}개의 시간표 생성됨")
+
+        # back 형식의 데이터를 front 형식으로 변환
+        timetable_front_object = [
+            convert_with_front(TO_FRONT, TIMETABLE, timetable_back_object)
+            for timetable_back_object in auto_fill_timetable_list
+        ]
+
+        return timetable_front_object
 
 
 # 테스트 코드
@@ -237,10 +287,6 @@ search_result = [
     },
 ]
 
-search_result = user.search_course_routine(search_word)
-print(search_result)
-exit()
-
 auto_fill_result = user.auto_fill_routine(
     [
         ["월요일 15시 ~ 16시 30분", "수요일 15시 ~ 16시 30분"],
@@ -250,10 +296,8 @@ auto_fill_result = user.auto_fill_routine(
         },
         {"컴퓨터공학과, 컴파일러, CSE4312": "박준석"},
     ],
-    MAJOR_MODE,
     search_result,
-    9,
-    69,
+    [[3, "컴퓨터공학과", "전공필수"], [3, "컴퓨터공학과", "교양필수"], [3, "일반교양"]],
 )
 
 print(auto_fill_result[0])

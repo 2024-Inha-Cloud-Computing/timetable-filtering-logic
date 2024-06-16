@@ -8,7 +8,7 @@ import pandas as pd
 # 백트래킹을 이용한 시간표 자동 채우기
 def auto_fill(timetable_df, pool_df, fill_credit):
     def backtracking(timetable_df, pool_df, fill_credit, cur_credit):
-        print(cur_credit, fill_credit, len(timetable_df_list))
+        print(f"\r만들어진 시간표 수: {len(timetable_df_list)}", end="")
 
         if cur_credit == fill_credit:
             timetable_df_list.append(timetable_df.copy())
@@ -23,15 +23,14 @@ def auto_fill(timetable_df, pool_df, fill_credit):
                 continue
 
             timetable_df = pd.concat([timetable_df, course_series.to_frame().T])
-            pool_df = pool_df.drop(index)
+            pool_df_args = pool_df.copy().drop(index)
             backtracking(
                 timetable_df,
-                pool_df,
+                pool_df_args,
                 fill_credit,
                 next_credit,
             )
             timetable_df = timetable_df.iloc[:-1]
-            pool_df = pd.concat([pool_df, course_series.to_frame().T])
 
     timetable_df = timetable_df.copy()
     timetable_df_list = []
