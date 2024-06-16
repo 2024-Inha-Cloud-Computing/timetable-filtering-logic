@@ -72,6 +72,12 @@ class TimetableInterface:
         )
 
         timetable_df_list_back_object = require_course_timetable(course_df_back_object)
+
+        # 취향 순으로 정렬 후 상위 10개만 반환
+        timetable_df_list_back_object = sort_timetable_by_taste(
+            timetable_df_list_back_object, self.__user_taste
+        )[:10]
+
         timetable_df_list_front_object = [
             convert_with_front(TO_FRONT, TIMETABLE, timetable_df_back_object)
             for timetable_df_back_object in timetable_df_list_back_object
