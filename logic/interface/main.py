@@ -301,7 +301,7 @@ search_result = [
     },
 ]
 
-print(user.require_course_timetable_routine(user.search_course_routine("박준석")))
+user.require_course_timetable_routine([])
 print(
     user.timetable_filter_routine(
         [
@@ -321,9 +321,9 @@ auto_fill_result = user.auto_fill_routine(
         },
         {"컴퓨터공학과, 컴파일러, CSE4312": "박준석"},
     ],
-    search_result,
+    [],
     [
-        [9, "컴퓨터공학과", "전공선택"],
+        [6, "컴퓨터공학과", "전공선택"],
         [3, "컴퓨터공학과", "교양필수"],
         [3, "핵심교양 1"],
     ],

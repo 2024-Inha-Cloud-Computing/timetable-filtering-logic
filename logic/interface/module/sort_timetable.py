@@ -148,6 +148,8 @@ def get_height(timetable_df):
         timetable_df_bitwise_or, dtype=np.uint32
     )
 
+    top, bottom = 0, 0
+
     for time_index in range(TIME_NUM):
         if timetable_df_bitwise_or & (1 << time_index):
             top = time_index

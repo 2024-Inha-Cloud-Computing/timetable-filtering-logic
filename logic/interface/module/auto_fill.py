@@ -22,7 +22,10 @@ def auto_fill(timetable_df, pool_df, fill_credit):
             if next_credit > fill_credit:
                 continue
 
-            timetable_df = pd.concat([timetable_df, pd.DataFrame([course_series])])
+            if timetable_df.empty:
+                timetable_df = pd.DataFrame([course_series])
+            else:
+                timetable_df = pd.concat([timetable_df, pd.DataFrame([course_series])])
             pool_df_args = pool_df.copy().drop(course_series.Index)
             backtracking(
                 timetable_df,

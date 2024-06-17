@@ -16,9 +16,13 @@ def require_course_timetable(course_df):
     )
 
     timetable_df_list = [
-        pd.concat(
-            [course_id_df_list[i].loc[row] for i, row in enumerate(row)], axis=1
-        ).T
+        (
+            pd.concat(
+                [course_id_df_list[i].loc[row] for i, row in enumerate(row)], axis=1
+            ).T
+            if row
+            else pd.DataFrame(columns=course_df.columns)
+        )
         for row in row_product
     ]
 

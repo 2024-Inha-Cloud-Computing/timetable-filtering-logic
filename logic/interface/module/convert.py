@@ -100,7 +100,7 @@ def convert_course_to_front(course_df):
 
 
 def convert_course_to_back(entire_course_bit_df, course_list):
-    course_df = pd.DataFrame()
+    course_df = pd.DataFrame(columns=entire_course_bit_df.columns)
 
     for course_list_element in course_list:
         department, course_name, course_id = course_list_element.split(", ")
