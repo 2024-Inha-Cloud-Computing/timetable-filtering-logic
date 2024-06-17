@@ -107,10 +107,10 @@ class TimetableInterface:
 
         return find_professor_front_object
 
-    def timetable_filter_routine(self, filter_data_front_object):
+    def timetable_filter_routine(self, filter_data_front_object, filter_priority):
         """
         필터링 조건을 받아 필터링된 시간표 리스트를 반환하는 함수
-        input: 필터링 조건 list [avoid_time: list, prefer_professor: dict, avoid_professor: dict]
+        input: 필터링 조건 list [avoid_time: list, prefer_professor: dict, avoid_professor: dict], 필터링 우선순위 list ["time", "good", "bad"] <- 순서대로 필터링 조건을 적용
         output: 필터링된 시간표 list
         """
         if self.__require_course_timetable_df_list is None:
@@ -123,8 +123,23 @@ class TimetableInterface:
         )
 
         timetable_df_list_back_object = filter_timetable(
-            timetable_df_list_back_object, filter_back_object
+            timetable_df_list_back_object, filter_back_object, filter_priority
         )
+
+        is_filter_pop = False
+
+        while timetable_df_list_back_object[0].empty and filter_priority:
+            # 필터링 조건을 뒤에서부터 하나씩 제거하며 시간표를 찾음
+            filter_priority.pop()
+            is_filter_pop = True
+
+            timetable_df_list_back_object = filter_timetable(
+                self.__require_course_timetable_df_list,
+                filter_back_object,
+                filter_priority,
+            )
+
+            print("필터링 조건을 줄여 시간표를 찾는 중...")
 
         # 취향 순으로 정렬 후 상위 10개만 반환
         timetable_df_list_back_object = sort_timetable_by_taste(
@@ -136,7 +151,7 @@ class TimetableInterface:
             for timetable_df_back_object in timetable_df_list_back_object
         ]
 
-        return timetable_list_front_object
+        return timetable_list_front_object, is_filter_pop
 
     def auto_fill_routine(
         self, filter_data_front_object, timetable_front_object, mode_list_front_object
@@ -308,7 +323,8 @@ print(
             ["월요일 15시 ~ 16시 30분", "수요일 15시 ~ 16시 30분"],
             {},
             {"컴퓨터공학과, 컴파일러, CSE4312": "박준석"},
-        ]
+        ],
+        ["time", "good", "bad"],
     )
 )
 
