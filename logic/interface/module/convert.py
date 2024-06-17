@@ -6,39 +6,55 @@ import pandas as pd
 
 
 # 시간표에서 사용할 강의 데이터를 프론트에서 사용할 수 있는 형태로 변환
-def convert_timetable_element_to_front(course_series):
+def convert_timetable_element_to_front(course_series, web_course_cnt):
     course_time_classroom = course_series.time_classroom
     course_list = []
     day_list = ["월", "화", "수", "목", "금", "토", "셀"]
 
     for day_index, course_time_classroom_element in enumerate(course_time_classroom):
-        time_head = None
-        duration = 0
-        for time_index in range(TIME_NUM):
-            if course_time_classroom_element & (1 << time_index):
-                if time_head is None:
-                    time_head = 8.5 + time_index * 0.5
-                    duration += 0.5
+        if day_index == DAY_NUM - 1 and course_time_classroom_element != 0:
+            day_name = "웹"
+            course_list.append(
+                {
+                    "day": day_name,
+                    "time": 7.0 + 2.0 * web_course_cnt,
+                    "duration": 2.0,
+                    "subject": course_series.course_name,
+                    "room": course_series.classroom[day_list[day_index]],
+                    "professor": course_series.professor,
+                    "course_class_id": course_series.course_class_id,
+                }
+            )
+        else:
+            time_head = None
+            duration = 0
+            for time_index in range(TIME_NUM):
+                if course_time_classroom_element & (1 << time_index):
+                    if time_head is None:
+                        time_head = 8.5 + time_index * 0.5
+                        duration += 0.5
+                    else:
+                        duration += 0.5
                 else:
-                    duration += 0.5
-            else:
-                if time_head is not None:
-                    try:
-                        course_list.append(
-                            {
-                                "day": day_list[day_index],
-                                "time": time_head,
-                                "duration": duration,
-                                "subject": course_series.course_name,
-                                "room": course_series.classroom[day_list[day_index]],
-                                "professor": course_series.professor,
-                                "course_class_id": course_series.course_class_id,
-                            }
-                        )
-                    except:
-                        raise KeyError(f"KeyError: {course_series.classroom}")
-                    time_head = None
-                    duration = 0
+                    if time_head is not None:
+                        try:
+                            course_list.append(
+                                {
+                                    "day": day_list[day_index],
+                                    "time": time_head,
+                                    "duration": duration,
+                                    "subject": course_series.course_name,
+                                    "room": course_series.classroom[
+                                        day_list[day_index]
+                                    ],
+                                    "professor": course_series.professor,
+                                    "course_class_id": course_series.course_class_id,
+                                }
+                            )
+                        except:
+                            raise KeyError(f"KeyError: {course_series.classroom}")
+                        time_head = None
+                        duration = 0
 
     return course_list
 
@@ -50,9 +66,15 @@ def convert_timetable_element_to_back(course_series):
 # 시간표 데이터를 프론트에서 사용할 수 있는 형태로 변환
 def convert_timetable_to_front(timetable_df):
     timetable_list = []
+    web_course_cnt = 0
 
     for course_series in timetable_df.itertuples():
-        timetable_list += convert_timetable_element_to_front(course_series)
+        if course_series.time_classroom[DAY_NUM - 1] != 0:
+            web_course_cnt += 1
+
+        timetable_list += convert_timetable_element_to_front(
+            course_series, web_course_cnt
+        )
 
     return timetable_list
 

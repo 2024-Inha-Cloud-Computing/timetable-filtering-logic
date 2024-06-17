@@ -8,20 +8,16 @@ import pandas as pd
 def set_pool_by_timetable(entire_course_bit_df, timetable_df):
     pool = entire_course_bit_df.copy()
 
-    timetable_df_course_id_set = set(timetable_df["course_id"].tolist())
-    timetable_df_grade_set = set(timetable_df["grade"].tolist())
+    # timetable_df_course_id_set = set(timetable_df["course_id"].tolist())
+    # timetable_df_grade_set = set(timetable_df["grade"].tolist())
 
     for course_series in pool.itertuples():
         if not is_valid_course(course_series, timetable_df):
             pool = pool.drop(course_series.Index)
             continue
 
-        if course_series.course_id in timetable_df_course_id_set:
-            pool = pool.drop(course_series.Index)
-            continue
-
-        # if course_series["grade"] not in timetable_df_grade_set:
-        #     pool = pool.drop(index, errors="ignore")
+        # if course_series.grade not in timetable_df_grade_set:
+        #     pool = pool.drop(course_series.Index)
 
     return pool
 
@@ -49,6 +45,11 @@ def set_pool_by_mode(
             department_id_by_curriculum
         ][1]
         return liberal_required_pool
+    elif auto_fill_mode == "교양영어":
+        english_pool = elective_course_bit_df[
+            elective_course_bit_df["department"] == "기타-교양영어"
+        ]
+        return english_pool
     elif auto_fill_mode.startswith("핵심교양"):
         ged_num = auto_fill_mode[-1]
         ged_pool = elective_course_bit_df[
