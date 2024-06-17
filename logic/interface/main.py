@@ -152,6 +152,19 @@ class TimetableInterface:
 
         return timetable_list_front_object, is_filter_pop
 
+    def get_department_list_routine(self):
+        """
+        학과 리스트를 반환하는 함수
+        input: 없음
+        output: 학과 list
+        """
+        department_list = [
+            department_element.split("-")[0]
+            for department_element in self.__department_id_to_name_by_curriculum
+        ]
+
+        return department_list
+
     def auto_fill_routine(
         self, filter_data_front_object, timetable_front_object, mode_list_front_object
     ):
@@ -275,6 +288,8 @@ class TimetableInterface:
 # 테스트 코드
 user_taste = [False, 2, False]
 user = TimetableInterface(user_taste)
+print(user.get_department_list_routine())
+exit()
 search_word = "김지응"
 search_result = [
     {
@@ -326,6 +341,7 @@ print(
         ["time", "good", "bad"],
     )
 )
+exit()
 
 auto_fill_result = user.auto_fill_routine(
     [
