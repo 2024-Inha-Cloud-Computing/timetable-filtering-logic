@@ -244,7 +244,7 @@ class TimetableInterface:
         )
 
         if not is_valid_course(course_back_object, timetable_back_object):
-            return False
+            return False, timetable_back_object.credits.sum()
 
         timetable_back_object = pd.concat(
             [timetable_back_object, pd.DataFrame(course_back_object).T]
@@ -254,7 +254,7 @@ class TimetableInterface:
             TO_FRONT, TIMETABLE, timetable_back_object
         )
 
-        return timetable_front_object
+        return timetable_front_object, timetable_back_object.credits.sum()
 
     def remove_course_in_timetable_routine(
         self, timetable_front_object, course_front_object
@@ -279,7 +279,7 @@ class TimetableInterface:
             TO_FRONT, TIMETABLE, timetable_back_object
         )
 
-        return timetable_front_object
+        return timetable_front_object, timetable_back_object.credits.sum()
 
     def auto_fill_routine(self, timetable_front_object, mode_list_front_object):
         """
@@ -438,7 +438,7 @@ search_result = [
 add_timetable = user.add_course_in_timetable_routine(search_result, "A, GED1002-005")
 print(add_timetable)
 remove_timetable = user.remove_course_in_timetable_routine(
-    add_timetable, "A, GED1002-005"
+    add_timetable[0], "A, GED1002-005"
 )
 print(remove_timetable)
 exit()
