@@ -103,11 +103,12 @@ def get_taste(timetable_df, user_taste):
     time1_score = 0
 
     for course_series in timetable_df.itertuples():
-        course_time_classroom = course_series.time_classroom
+        course_time_classroom = course_series.time_classroom[:-1]
 
         time1_score_bitwise_and = np.bitwise_and(
             time1_bit, course_time_classroom, dtype=np.uint32
         )
+
         time1_score_cur = bit_count(time1_score_bitwise_and).sum()
         time1_score += time1_score_cur
 
@@ -127,7 +128,7 @@ def get_taste(timetable_df, user_taste):
 
 def get_no_class_day(timetable_df):
     timetable_df_bitwise_or = np.bitwise_or.reduce(
-        timetable_df["time_classroom"].tolist(), dtype=np.uint32
+        timetable_df["time_classroom"].tolist()[:-1], dtype=np.uint32
     )
 
     no_class_day = 0
@@ -141,7 +142,7 @@ def get_no_class_day(timetable_df):
 
 def get_height(timetable_df):
     timetable_df_bitwise_or = np.bitwise_or.reduce(
-        timetable_df["time_classroom"].tolist(), dtype=np.uint32
+        timetable_df["time_classroom"].tolist()[:-1], dtype=np.uint32
     )
 
     timetable_df_bitwise_or = np.bitwise_or.reduce(
