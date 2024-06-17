@@ -64,6 +64,20 @@ class TimetableInterface:
 
         return search_course_front_object
 
+    def search_course_routine_extended(self, search_word=""):
+        """
+        검색어를 받아 검색 결과를 반환하는 함수
+        input: 검색어 string
+        output: 검색 결과 list
+        """
+
+        search_course_back_opject = search_course(search_word, self.__entire_course_df)
+        search_course_front_object = convert_with_front(
+            TO_FRONT, COURSE_EXTENDED, search_course_back_opject
+        )
+
+        return search_course_front_object
+
     def require_course_timetable_routine(self, course_list):
         """
         강의 리스트를 받아 이 강의로만 이루어진 시간표를 반환하는 함수
@@ -320,14 +334,21 @@ search_result = [
     },
 ]
 
+print(*user.search_course_routine_extended(""), sep="\n\n")
+exit()
 
-auto_fill_result = user.auto_fill_routine(
-    search_result,
-    [
-        [6, "컴퓨터공학과", "전공선택"],
-        [3, "컴퓨터공학과", "교양필수"],
-        [3, "일반교양"],
-    ],
-)
+while True:
+    try:
+        auto_fill_result = user.auto_fill_routine(
+            search_result,
+            [
+                [6, "컴퓨터공학과", "전공선택"],
+                [3, "컴퓨터공학과", "교양필수"],
+                [3, "일반교양"],
+            ],
+        )
 
-print(*auto_fill_result, sep="\n\n")
+        print(*auto_fill_result, sep="\n\n")
+    except Exception as e:
+        print(e)
+        break

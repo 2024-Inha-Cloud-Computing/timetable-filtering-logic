@@ -136,6 +136,39 @@ def convert_course_to_back(entire_course_bit_df, course_list):
     return course_df
 
 
+def convert_course_extended_to_front(course_extended_df):
+    course_extended_list = []
+
+    for course_extended_series in course_extended_df.itertuples():
+        department_name = course_extended_series.department
+        if department_name.startswith("기타"):
+            department_name = department_name.split("-")[1]
+        else:
+            department_name = department_name.split("-")[0]
+        course_class_id = course_extended_series.course_class_id
+        course_name = course_extended_series.course_name
+        course_grade = course_extended_series.grade
+        course_credit = course_extended_series.credits
+        course_classification = course_extended_series.course_classification
+        course_time_classroom = course_extended_series.time_classroom
+        course_professor = course_extended_series.professor
+        course_assessment_method = course_extended_series.assessment_method
+        course_notes = course_extended_series.notes
+        course_rating = str(course_extended_series.rating)
+        if course_rating == "nan":
+            course_rating = "0.0"
+
+        course_extended_list.append(
+            f"{department_name}, {course_class_id}, {course_name}, {course_grade}, {course_credit}, {course_classification}, {course_time_classroom}, {course_professor}, {course_assessment_method}, {course_notes}, {course_rating}"
+        )
+
+    return course_extended_list
+
+
+def convert_course_extended_to_back(entire_course_bit_df, course_extended_list):
+    pass
+
+
 def convert_professor_to_front(professor_dict):
     return professor_dict
 
@@ -229,6 +262,8 @@ def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=N
             return convert_timetable_to_front(unknown_object)
         elif object_type == COURSE:
             return convert_course_to_front(unknown_object)
+        elif object_type == COURSE_EXTENDED:
+            return convert_course_extended_to_front(unknown_object)
         elif object_type == PROFESSOR:
             return convert_professor_to_front(unknown_object)
         elif object_type == FILTER:
@@ -240,6 +275,8 @@ def convert_with_front(mode, object_type, unknown_object, entire_course_bit_df=N
             return convert_timetable_to_back(entire_course_bit_df, unknown_object)
         elif object_type == COURSE:
             return convert_course_to_back(entire_course_bit_df, unknown_object)
+        elif object_type == COURSE_EXTENDED:
+            return convert_course_extended_to_back(entire_course_bit_df, unknown_object)
         elif object_type == PROFESSOR:
             return convert_professor_to_back(entire_course_bit_df, unknown_object)
         elif object_type == FILTER:
