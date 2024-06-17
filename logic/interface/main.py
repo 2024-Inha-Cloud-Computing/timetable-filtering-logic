@@ -26,6 +26,9 @@ class TimetableInterface:
             user_taste  # [오전/오후 수업, 1교시 수업 수, 우주 공강 여부]
         )
         self.__user_timetable_df_list = []
+        self.__require_course_timetable_df_list = (
+            None  # require_course_timetable 함수에서 사용하는 변수
+        )
 
         # 강의 데이터 불러오기
         (
@@ -72,6 +75,7 @@ class TimetableInterface:
         )
 
         timetable_df_list_back_object = require_course_timetable(course_df_back_object)
+        self.__require_course_timetable_df_list = timetable_df_list_back_object  # timetable_filter_routine 함수에서 사용하기 위해 저장
 
         # 취향 순으로 정렬 후 상위 10개만 반환
         timetable_df_list_back_object = sort_timetable_by_taste(
@@ -103,18 +107,17 @@ class TimetableInterface:
 
         return find_professor_front_object
 
-    def timetable_filter_routine(
-        self, timetable_list_front_object, filter_data_front_object
-    ):
+    def timetable_filter_routine(self, filter_data_front_object):
         """
-        시간표 리스트와 필터링 조건을 받아 필터링된 시간표 리스트를 반환하는 함수
-        input: 시간표 list: list[list], 필터링 조건 list [avoid_time: list, prefer_professor: dict, avoid_professor: dict]
+        필터링 조건을 받아 필터링된 시간표 리스트를 반환하는 함수
+        input: 필터링 조건 list [avoid_time: list, prefer_professor: dict, avoid_professor: dict]
         output: 필터링된 시간표 list
         """
-        timetable_df_list_back_object = [
-            convert_with_front(TO_BACK, TIMETABLE, timetable_list_element_front_object)
-            for timetable_list_element_front_object in timetable_list_front_object
-        ]
+        if self.__require_course_timetable_df_list is None:
+            raise ValueError(
+                "시간표 필터링을 하기 전에 require_course_timetable 함수를 실행해야 합니다."
+            )
+        timetable_df_list_back_object = self.__require_course_timetable_df_list
         filter_back_object = convert_with_front(
             TO_BACK, FILTER, filter_data_front_object
         )
@@ -122,6 +125,11 @@ class TimetableInterface:
         timetable_df_list_back_object = filter_timetable(
             timetable_df_list_back_object, filter_back_object
         )
+
+        # 취향 순으로 정렬 후 상위 10개만 반환
+        timetable_df_list_back_object = sort_timetable_by_taste(
+            timetable_df_list_back_object, self.__user_taste
+        )[:10]
 
         timetable_list_front_object = [
             convert_with_front(TO_FRONT, TIMETABLE, timetable_df_back_object)
@@ -292,6 +300,17 @@ search_result = [
         "course_class_id": "CSE4312-002",
     },
 ]
+
+print(user.require_course_timetable_routine(user.search_course_routine("박준석")))
+print(
+    user.timetable_filter_routine(
+        [
+            ["월요일 15시 ~ 16시 30분", "수요일 15시 ~ 16시 30분"],
+            {},
+            {"컴퓨터공학과, 컴파일러, CSE4312": "박준석"},
+        ]
+    )
+)
 
 auto_fill_result = user.auto_fill_routine(
     [
