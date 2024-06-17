@@ -117,13 +117,12 @@ class TimetableInterface:
             raise ValueError(
                 "시간표 필터링을 하기 전에 require_course_timetable 함수를 실행해야 합니다."
             )
-        timetable_df_list_back_object = self.__require_course_timetable_df_list
         filter_back_object = convert_with_front(
             TO_BACK, FILTER, filter_data_front_object
         )
 
         timetable_df_list_back_object = filter_timetable(
-            timetable_df_list_back_object, filter_back_object, filter_priority
+            self.__require_course_timetable_df_list, filter_back_object, filter_priority
         )
 
         is_filter_pop = False

@@ -1,6 +1,7 @@
 from constant_variable import *
 
 import numpy as np
+import pandas as pd
 
 
 def filter_timetable(timetable_df_list, filter_data, filter_priority):
@@ -39,5 +40,8 @@ def filter_timetable(timetable_df_list, filter_data, filter_priority):
 
         if is_valid_timetable:
             filter_timetable_df_list.append(timetable_df)
+
+    if filter_timetable_df_list == []:
+        filter_timetable_df_list.append(pd.DataFrame(columns=timetable_df.columns))
 
     return filter_timetable_df_list

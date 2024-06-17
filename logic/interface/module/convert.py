@@ -139,6 +139,7 @@ def convert_filter_to_front(avoid_time_bit):
 
 
 def convert_filter_to_back(filter_data):
+    filter_data = filter_data.copy()
     # 1. 필터에서 피해야 할 시간을 bit로 변환
     # 예시
     # "월요일 15시 30분 ~ 17시 30분"
