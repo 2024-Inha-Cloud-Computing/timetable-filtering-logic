@@ -228,6 +228,59 @@ class TimetableInterface:
 
         return department_list
 
+    def add_course_in_timetable_routine(
+        self, timetable_front_object, course_front_object
+    ):
+        """
+        시간표에 강의를 추가하는 함수
+        input: 시간표, 강의
+        output: 추가된 시간표
+        """
+        timetable_back_object = convert_with_front(
+            TO_BACK, TIMETABLE, timetable_front_object, self.__entire_course_bit_df
+        )
+        course_back_object = convert_with_front(
+            TO_BACK, COURSE_EXTENDED, course_front_object, self.__entire_course_bit_df
+        )
+
+        if not is_valid_course(course_back_object, timetable_back_object):
+            return False
+
+        timetable_back_object = pd.concat(
+            [timetable_back_object, pd.DataFrame(course_back_object).T]
+        )
+
+        timetable_front_object = convert_with_front(
+            TO_FRONT, TIMETABLE, timetable_back_object
+        )
+
+        return timetable_front_object
+
+    def remove_course_in_timetable_routine(
+        self, timetable_front_object, course_front_object
+    ):
+        """
+        시간표에서 강의를 제거하는 함수
+        input: 시간표, 강의
+        output: 제거된 시간표
+        """
+        timetable_back_object = convert_with_front(
+            TO_BACK, TIMETABLE, timetable_front_object, self.__entire_course_bit_df
+        )
+        course_back_object = convert_with_front(
+            TO_BACK, COURSE_EXTENDED, course_front_object, self.__entire_course_bit_df
+        )
+
+        timetable_back_object = timetable_back_object[
+            timetable_back_object.course_class_id != course_back_object.course_class_id
+        ]
+
+        timetable_front_object = convert_with_front(
+            TO_FRONT, TIMETABLE, timetable_back_object
+        )
+
+        return timetable_front_object
+
     def auto_fill_routine(self, timetable_front_object, mode_list_front_object):
         """
         시간표를 자동으로 채워주는 함수
@@ -382,7 +435,12 @@ search_result = [
     },
 ]
 
-print(user.get_department_extended_list_routine())
+add_timetable = user.add_course_in_timetable_routine(search_result, "A, GED1002-005")
+print(add_timetable)
+remove_timetable = user.remove_course_in_timetable_routine(
+    add_timetable, "A, GED1002-005"
+)
+print(remove_timetable)
 exit()
 print(*user.search_course_routine_extended("", ["", "", "", "3"]), sep="\n\n")
 exit()

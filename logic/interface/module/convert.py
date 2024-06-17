@@ -69,6 +69,7 @@ def convert_timetable_to_front(timetable_df):
     web_course_cnt = 0
 
     for course_series in timetable_df.itertuples():
+        print(course_series.time_classroom)
         if course_series.time_classroom[DAY_NUM - 1] != 0:
             web_course_cnt += 1
 
@@ -165,8 +166,14 @@ def convert_course_extended_to_front(course_extended_df):
     return course_extended_list
 
 
-def convert_course_extended_to_back(entire_course_bit_df, course_extended_list):
-    pass
+def convert_course_extended_to_back(entire_course_bit_df, course_extended_str):
+    course_class_id = course_extended_str.split(", ")[1]
+
+    course_extended_series = entire_course_bit_df[
+        entire_course_bit_df["course_class_id"] == course_class_id
+    ].iloc[0]
+
+    return course_extended_series
 
 
 def convert_professor_to_front(professor_dict):
