@@ -64,14 +64,42 @@ class TimetableInterface:
 
         return search_course_front_object
 
-    def search_course_routine_extended(self, search_word=""):
+    def search_course_routine_extended_routine(
+        self, search_word, filter_data=["", "", "", ""]
+    ):
         """
         검색어를 받아 검색 결과를 반환하는 함수
-        input: 검색어 string
+        input: 검색어 string, 필터링 조건 list [department, course_classification, grade, credit]
         output: 검색 결과 list
         """
 
         search_course_back_opject = search_course(search_word, self.__entire_course_df)
+
+        # 필터링 조건에 따라 강의를 필터링
+        # 1. 학과
+        if filter_data[0] != "":
+            search_course_back_opject = search_course_back_opject[
+                search_course_back_opject.department.str.contains(filter_data[0])
+            ]
+
+        # 2. 과목 분류
+        if filter_data[1] != "":
+            search_course_back_opject = search_course_back_opject[
+                search_course_back_opject.course_classification == filter_data[1]
+            ]
+
+        # 3. 학년
+        if filter_data[2] != "":
+            search_course_back_opject = search_course_back_opject[
+                search_course_back_opject.grade == filter_data[2]
+            ]
+
+        # 4. 학점
+        if filter_data[3] != "":
+            search_course_back_opject = search_course_back_opject[
+                search_course_back_opject.credits == int(filter_data[3])
+            ]
+
         search_course_front_object = convert_with_front(
             TO_FRONT, COURSE_EXTENDED, search_course_back_opject
         )
@@ -177,6 +205,26 @@ class TimetableInterface:
             department_element.split("-")[0]
             for department_element in self.__department_id_to_name_by_curriculum
         ]
+
+        return department_list
+
+    def get_department_extended_list_routine(self):
+        """
+        학과 리스트를 반환하는 함수
+        input: 없음
+        output: 학과 list
+        """
+        department_list = []
+
+        for department_element in self.__department_id_to_name_by_course:
+            department_name = department_element
+
+            if department_name.startswith("기타"):
+                department_name = department_name.split("-", 1)[1]
+            else:
+                department_name = department_name.split("-")[0]
+
+            department_list.append(department_name)
 
         return department_list
 
@@ -334,7 +382,9 @@ search_result = [
     },
 ]
 
-print(*user.search_course_routine_extended(""), sep="\n\n")
+print(user.get_department_extended_list_routine())
+exit()
+print(*user.search_course_routine_extended("", ["", "", "", "3"]), sep="\n\n")
 exit()
 
 while True:
