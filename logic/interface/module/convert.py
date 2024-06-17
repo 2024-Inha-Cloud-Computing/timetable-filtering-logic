@@ -69,7 +69,6 @@ def convert_timetable_to_front(timetable_df):
     web_course_cnt = 0
 
     for course_series in timetable_df.itertuples():
-        print(course_series.time_classroom)
         if course_series.time_classroom[DAY_NUM - 1] != 0:
             web_course_cnt += 1
 

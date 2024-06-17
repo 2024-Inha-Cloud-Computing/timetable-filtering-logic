@@ -267,12 +267,9 @@ class TimetableInterface:
         timetable_back_object = convert_with_front(
             TO_BACK, TIMETABLE, timetable_front_object, self.__entire_course_bit_df
         )
-        course_back_object = convert_with_front(
-            TO_BACK, COURSE_EXTENDED, course_front_object, self.__entire_course_bit_df
-        )
 
         timetable_back_object = timetable_back_object[
-            timetable_back_object.course_class_id != course_back_object.course_class_id
+            timetable_back_object.course_name != course_front_object
         ]
 
         timetable_front_object = convert_with_front(
@@ -438,7 +435,7 @@ search_result = [
 add_timetable = user.add_course_in_timetable_routine(search_result, "A, GED1002-005")
 print(add_timetable)
 remove_timetable = user.remove_course_in_timetable_routine(
-    add_timetable[0], "A, GED1002-005"
+    add_timetable[0], "공학윤리와 토론"
 )
 print(remove_timetable)
 exit()
