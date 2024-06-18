@@ -20,7 +20,11 @@ def convert_timetable_element_to_front(course_series, web_course_cnt):
                     "time": 7.0 + 2.0 * web_course_cnt,
                     "duration": 2.0,
                     "subject": course_series.course_name,
-                    "room": course_series.classroom[day_list[day_index]],
+                    "room": (
+                        course_series.classroom[day_list[day_index]]
+                        if day_list[day_index] in course_series.classroom
+                        else ""
+                    ),
                     "professor": course_series.professor,
                     "course_class_id": course_series.course_class_id,
                 }
@@ -44,9 +48,12 @@ def convert_timetable_element_to_front(course_series, web_course_cnt):
                                     "time": time_head,
                                     "duration": duration,
                                     "subject": course_series.course_name,
-                                    "room": course_series.classroom[
-                                        day_list[day_index]
-                                    ],
+                                    "room": (
+                                        course_series.classroom[day_list[day_index]]
+                                        if day_list[day_index]
+                                        in course_series.classroom
+                                        else ""
+                                    ),
                                     "professor": course_series.professor,
                                     "course_class_id": course_series.course_class_id,
                                 }

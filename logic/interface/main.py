@@ -351,12 +351,9 @@ class TimetableInterface:
             print(f"{mode} 모드로 시간표 자동 채우기 중...")
             auto_fill_timetable_list_next = []
             for auto_fill_timetable in auto_fill_timetable_list:
-                auto_fill_timetable_list = auto_fill(
-                    auto_fill_timetable,
-                    pool,
-                    mode[0],
+                auto_fill_timetable_list_next += auto_fill(
+                    auto_fill_timetable, pool, mode[0]
                 )
-                auto_fill_timetable_list_next.extend(auto_fill_timetable_list)
 
             timetable_cnt += len(auto_fill_timetable_list_next)
 
@@ -375,8 +372,6 @@ class TimetableInterface:
             print(f"\t총 {timetable_cnt}개의 시간표 생성됨")
 
         print("시간표 자동 채우기 완료!")
-
-        print(auto_fill_timetable_list[0])
 
         # back 형식의 데이터를 front 형식으로 변환
         timetable_front_object = [
@@ -437,7 +432,6 @@ remove_timetable = user.remove_course_in_timetable_routine(
 )
 print(remove_timetable)
 print(*user.search_course_extended_routine(""), sep="\n\n")
-exit()
 
 while True:
     try:
@@ -450,7 +444,7 @@ while True:
             ],
         )
 
-        print(*auto_fill_result, sep="\n\n")
+        # print(*auto_fill_result, sep="\n\n")
     except Exception as e:
         print(e)
         break
