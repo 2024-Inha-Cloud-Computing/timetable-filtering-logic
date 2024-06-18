@@ -55,53 +55,51 @@ class TimetableInterface:
         output: 검색 결과 list
         """
 
-        search_course_back_opject = search_course(
+        search_course_back_object = search_course(
             search_word, self.__entire_course_bit_df
         )
         search_course_front_object = convert_with_front(
-            TO_FRONT, COURSE, search_course_back_opject
+            TO_FRONT, COURSE, search_course_back_object
         )
 
         return search_course_front_object
 
-    def search_course_routine_extended_routine(
-        self, search_word, filter_data=["", "", "", ""]
-    ):
+    def search_course_extended_routine(self, search_word, filter_data=["", "", "", ""]):
         """
         검색어를 받아 검색 결과를 반환하는 함수
         input: 검색어 string, 필터링 조건 list [department, course_classification, grade, credit]
         output: 검색 결과 list
         """
 
-        search_course_back_opject = search_course(search_word, self.__entire_course_df)
+        search_course_back_object = search_course(search_word, self.__entire_course_df)
 
         # 필터링 조건에 따라 강의를 필터링
         # 1. 학과
         if filter_data[0] != "":
-            search_course_back_opject = search_course_back_opject[
-                search_course_back_opject.department.str.contains(filter_data[0])
+            search_course_back_object = search_course_back_object[
+                search_course_back_object.department.str.contains(filter_data[0])
             ]
 
         # 2. 과목 분류
         if filter_data[1] != "":
-            search_course_back_opject = search_course_back_opject[
-                search_course_back_opject.course_classification == filter_data[1]
+            search_course_back_object = search_course_back_object[
+                search_course_back_object.course_classification == filter_data[1]
             ]
 
         # 3. 학년
         if filter_data[2] != "":
-            search_course_back_opject = search_course_back_opject[
-                search_course_back_opject.grade == filter_data[2]
+            search_course_back_object = search_course_back_object[
+                search_course_back_object.grade == filter_data[2]
             ]
 
         # 4. 학점
         if filter_data[3] != "":
-            search_course_back_opject = search_course_back_opject[
-                search_course_back_opject.credits == int(filter_data[3])
+            search_course_back_object = search_course_back_object[
+                search_course_back_object.credits == int(filter_data[3])
             ]
 
         search_course_front_object = convert_with_front(
-            TO_FRONT, COURSE_EXTENDED, search_course_back_opject
+            TO_FRONT, COURSE_EXTENDED, search_course_back_object
         )
 
         return search_course_front_object
@@ -438,8 +436,7 @@ remove_timetable = user.remove_course_in_timetable_routine(
     add_timetable[0], "공학윤리와 토론"
 )
 print(remove_timetable)
-exit()
-print(*user.search_course_routine_extended("", ["", "", "", "3"]), sep="\n\n")
+print(*user.search_course_extended_routine(""), sep="\n\n")
 exit()
 
 while True:
