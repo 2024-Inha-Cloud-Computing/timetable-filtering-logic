@@ -13,6 +13,7 @@ from module.set_pool import *
 
 import pandas as pd
 import random
+import multiprocessing
 
 
 class TimetableInterface:
@@ -347,14 +348,30 @@ class TimetableInterface:
 
         auto_fill_timetable_list = [timetable_back_object]
 
+        manager = multiprocessing.Manager()
+
         for pool, mode in zip(pool_list, mode_list_front_object):
             print(f"{mode} 모드로 시간표 자동 채우기 중...")
-            auto_fill_timetable_list_next = []
-            for auto_fill_timetable in auto_fill_timetable_list:
-                auto_fill_timetable_list_next += auto_fill(
-                    auto_fill_timetable, pool, mode[0]
-                )
+            auto_fill_timetable_list_next = manager.list()
+            process_list = []
 
+            for auto_fill_timetable in auto_fill_timetable_list:
+                process = multiprocessing.Process(
+                    target=auto_fill_process,
+                    args=(
+                        auto_fill_timetable_list_next,
+                        auto_fill_timetable,
+                        pool,
+                        mode,
+                    ),
+                )
+                process.start()
+                process_list.append(process)
+
+            for process in process_list:
+                process.join()
+
+            auto_fill_timetable_list_next = list(auto_fill_timetable_list_next)
             timetable_cnt += len(auto_fill_timetable_list_next)
 
             # 랜덤으로 100개 추출해서 상위 10개만 반환
@@ -383,68 +400,82 @@ class TimetableInterface:
 
 
 # 테스트 코드
-user_taste = [False, 2, False]
-user = TimetableInterface(user_taste)
-search_word = "김지응"
-search_result = [
-    {
-        "day": "목",
-        "time": 12,
-        "duration": 1.5,
-        "subject": "프로그래밍언어 이론",
-        "room": "하-222",
-        "professor": "김지응",
-        "course_class_id": "CSE4232-001",
-    },
-    {
-        "day": "금",
-        "time": 12,
-        "duration": 1.5,
-        "subject": "프로그래밍언어 이론",
-        "room": "하-222",
-        "professor": "김지응",
-        "course_class_id": "CSE4232-001",
-    },
-    {
-        "day": "목",
-        "time": 15,
-        "duration": 1.5,
-        "subject": "컴파일러",
-        "room": "하-222",
-        "professor": "김지응",
-        "course_class_id": "CSE4312-002",
-    },
-    {
-        "day": "금",
-        "time": 15,
-        "duration": 1.5,
-        "subject": "컴파일러",
-        "room": "하-222",
-        "professor": "김지응",
-        "course_class_id": "CSE4312-002",
-    },
-]
+if __name__ == "__main__":
+    user_taste = [False, 2, False]
+    user = TimetableInterface(user_taste)
+    search_word = "김지응"
+    search_result = [
+        {
+            "day": "목",
+            "time": 12,
+            "duration": 1.5,
+            "subject": "프로그래밍언어 이론",
+            "room": "하-222",
+            "professor": "김지응",
+            "course_class_id": "CSE4232-001",
+        },
+        {
+            "day": "금",
+            "time": 12,
+            "duration": 1.5,
+            "subject": "프로그래밍언어 이론",
+            "room": "하-222",
+            "professor": "김지응",
+            "course_class_id": "CSE4232-001",
+        },
+        {
+            "day": "목",
+            "time": 15,
+            "duration": 1.5,
+            "subject": "컴파일러",
+            "room": "하-222",
+            "professor": "김지응",
+            "course_class_id": "CSE4312-002",
+        },
+        {
+            "day": "금",
+            "time": 15,
+            "duration": 1.5,
+            "subject": "컴파일러",
+            "room": "하-222",
+            "professor": "김지응",
+            "course_class_id": "CSE4312-002",
+        },
+    ]
 
-add_timetable = user.add_course_in_timetable_routine(search_result, "A, GED1002-005")
-print(add_timetable)
-remove_timetable = user.remove_course_in_timetable_routine(
-    add_timetable[0], "공학윤리와 토론"
-)
-print(remove_timetable)
-print(*user.search_course_extended_routine(""), sep="\n\n")
+    add_timetable = user.add_course_in_timetable_routine(
+        search_result, "A, GED1002-005"
+    )
+    print(add_timetable)
+    remove_timetable = user.remove_course_in_timetable_routine(
+        add_timetable[0], "공학윤리와 토론"
+    )
+    print(remove_timetable)
+    print(*user.search_course_extended_routine(""), sep="\n\n")
 
-while True:
-    try:
-        auto_fill_result = user.auto_fill_routine(
-            search_result,
-            [
-                [6, "컴퓨터공학과", "전공선택"],
-                [3, "컴퓨터공학과", "교양필수"],
-                [3, "일반교양"],
-            ],
-        )
+    auto_fill_result = user.auto_fill_routine(
+        search_result,
+        [
+            [6, "컴퓨터공학과", "전공선택"],
+            [3, "컴퓨터공학과", "교양필수"],
+            [3, "일반교양"],
+        ],
+    )
+    print(*auto_fill_result, sep="\n\n")
+    exit()
 
-        # print(*auto_fill_result, sep="\n\n")
-    except Exception as e:
-        print(e)
-        break
+    while True:
+        try:
+            auto_fill_result = user.auto_fill_routine(
+                search_result,
+                [
+                    [6, "컴퓨터공학과", "전공선택"],
+                    [3, "컴퓨터공학과", "교양필수"],
+                    [3, "일반교양"],
+                ],
+            )
+
+            # print(*auto_fill_result, sep="\n\n")
+        except Exception as e:
+            print(e)
+            break

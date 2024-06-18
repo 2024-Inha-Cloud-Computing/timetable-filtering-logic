@@ -43,3 +43,7 @@ def auto_fill(timetable_df, pool_df, fill_credit):
     backtracking(timetable_df, pool_df, fill_credit, 0, 0)
 
     return timetable_df_list
+
+
+def auto_fill_process(auto_fill_timetable_list_next, auto_fill_timetable, pool, mode):
+    auto_fill_timetable_list_next += auto_fill(auto_fill_timetable, pool, mode[0])
