@@ -227,6 +227,18 @@ class TimetableInterface:
 
         return department_list
 
+    def get_timetable_credit_routine(self, timetable_front_object):
+        """
+        시간표의 총 학점을 반환하는 함수
+        input: 시간표
+        output: 총 학점
+        """
+        timetable_back_object = convert_with_front(
+            TO_BACK, TIMETABLE, timetable_front_object, self.__entire_course_bit_df
+        )
+
+        return timetable_back_object.credits.sum()
+
     def add_course_in_timetable_routine(
         self, timetable_front_object, course_front_object
     ):
@@ -462,6 +474,8 @@ if __name__ == "__main__":
         ],
     )
     print(*auto_fill_result, sep="\n\n")
+
+    print(user.get_timetable_credit_routine(search_result))
     exit()
 
     while True:
